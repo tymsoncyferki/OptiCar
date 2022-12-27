@@ -1,3 +1,5 @@
+import org.imgscalr.Scalr;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -15,29 +17,36 @@ public class Car {
     int price;
 
     public Car(int i) {
-        name = "Optymalny samochód" + i;
+        name = "Special car no. " + i;
         price = random.nextInt(200000)+50000;
     }
 
     public JPanel carInfo() throws IOException {
         JPanel mainPanel = new JPanel();
-        mainPanel.setPreferredSize(new Dimension(400, 100));
+        mainPanel.setPreferredSize(new Dimension(400, 150));
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         mainPanel.setLayout(new BorderLayout());
 
+        JPanel infoPanel = new JPanel();
         JLabel carName = new JLabel("Model: " + name);
-        mainPanel.add(carName, BorderLayout.NORTH);
+        infoPanel.add(carName);
         JLabel carPrice = new JLabel("Price: " + price);
         carPrice.setPreferredSize(new Dimension(200, 20));
-        mainPanel.add(carPrice, BorderLayout.SOUTH);
+        infoPanel.add(carPrice);
+        mainPanel.add(infoPanel, BorderLayout.EAST);
 
+        JPanel photoPanel = new JPanel();
+        photoPanel.setPreferredSize(new Dimension(260, 140));
         URL url = new URL("https://www.ccarprice.com/products/Honda_Ridgeline_Black_Edition_2023.jpg");
-        BufferedImage c = ImageIO.read(url);
-        ImageIcon image = new ImageIcon(c);
-        JLabel carPhoto = new JLabel(image);
-        mainPanel.add(carPhoto, BorderLayout.WEST);
+        BufferedImage originalImage = ImageIO.read(url);
+        ImageIcon icon =  new ImageIcon(Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 260, 140, Scalr.OP_ANTIALIAS));
+        JLabel carPhoto = new JLabel(icon);
+        photoPanel.add(carPhoto);
+        mainPanel.add(photoPanel, BorderLayout.WEST);
+
         return mainPanel;
     }
+
 
     public JPanel carInfoDetailed() {
         return null;

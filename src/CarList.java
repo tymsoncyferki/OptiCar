@@ -20,12 +20,12 @@ public class CarList extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         listPanel = new JPanel();
-        listPanel.setPreferredSize(new Dimension(400, 500));
+        listPanel.setPreferredSize(new Dimension(400, 800));
         GridLayout gridLayout = new GridLayout(0,1);
         gridLayout.setVgap(3);
         listPanel.setLayout(gridLayout);
         // każda kolejna instancja klasy będzie brać kolejne 10 (lub inną liczbę) samochodów, w tym celu pole statyczne 1
-        for (int j = i*10; j < i*10+10; j++) {
+        for (int j = i*5 + 1; j <= i*5+5; j++) {
             Car car = new Car(j); // zamiast j będzie j-oty wiersz ramki
             try {
                 listPanel.add(car.carInfo());

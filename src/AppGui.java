@@ -22,7 +22,7 @@ public class AppGui extends JFrame implements ActionListener {
     public AppGui() {
         super("findcar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 800);
+        setSize(1000, 900);
         setLocation(0, 0);
         setLayout(cardLayout);
 
