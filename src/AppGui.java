@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 // nasze główne okno, będą w nim zaimplementowane strony do filtrowania i ustalania cech
 public class AppGui extends JFrame implements ActionListener {
@@ -15,19 +16,20 @@ public class AppGui extends JFrame implements ActionListener {
     JButton forwardButton;
     JLabel price;
     // secondPage
-    JPanel dragPanel, buttonPanel2;
-    JLabel info;
+    JPanel buttonPanel2, dragPanel;
     JButton backButton, searchButton;
 
     public AppGui() {
         super("findcar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 900);
+        setPreferredSize(new Dimension(1200, 900));
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocation(0, 0);
         setLayout(cardLayout);
 
         // panel 1
         firstPage = new JPanel();
+        firstPage.setPreferredSize(new Dimension(1600, 900));
         firstPage.setLayout(new BorderLayout());
 
         // collecting data
@@ -57,23 +59,25 @@ public class AppGui extends JFrame implements ActionListener {
 
         // panel 2
         secondPage = new JPanel();
+        secondPage.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
         secondPage.setLayout(new BorderLayout());
 
         // information
-        info = new JLabel("drag and drop (unfortunately sth else) will be here :)");
-        dragPanel = new JPanel();
-        dragPanel.add(info);
-        secondPage.add(dragPanel, BorderLayout.NORTH);
+//        traitPanel = new TraitTest();
+//        traitPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 100));
+//        secondPage.add(traitPanel, BorderLayout.NORTH);
+
+        // drag and drop
+        dragPanel = new DragAndDropList();
+        secondPage.add(dragPanel, BorderLayout.CENTER);
 
         // buttons
-        // back button
         backButton = new JButton("Back");
         backButton.setActionCommand("back");
         backButton.setPreferredSize(new Dimension(90, 30));
         backButton.addActionListener(this);
         buttonPanel2 = new JPanel();
         buttonPanel2.add(backButton);
-        // search button
         searchButton = new JButton("Search");
         searchButton.setActionCommand("search");
         searchButton.setPreferredSize(new Dimension(90, 30));
@@ -84,6 +88,7 @@ public class AppGui extends JFrame implements ActionListener {
         add(secondPage);
         // end panel2
 
+        pack();
     }
 
     @Override
@@ -92,6 +97,7 @@ public class AppGui extends JFrame implements ActionListener {
             // zczytuje dane które podał użytkownik i ustawia w odpowiednich polach klasy dane
             CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
             CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
+            CarData.filterData();
             cardLayout.next(this.getContentPane());
         }
 
@@ -99,8 +105,8 @@ public class AppGui extends JFrame implements ActionListener {
             cardLayout.previous(this.getContentPane());
         }
         if (e.getActionCommand().equals("search")) {
-            // zczyta kolejne dane do klasy dane, odpali się tu funkcje która sortuje dane
-            CarData.filterData();
+            CarData.traits = new ArrayList<>(DragAndDropList.dndList.getSelectedValuesList());
+            CarData.findCars();
             CarList carsList = new CarList(this);
             this.add(carsList);
             cardLayout.next(this.getContentPane());

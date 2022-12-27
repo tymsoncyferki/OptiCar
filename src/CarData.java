@@ -1,17 +1,24 @@
-public abstract class CarData {
+import java.util.ArrayList;
+
+public abstract class CarData{
     // klasa do przechowywania danych z metodą która agreguje ramkę
 
     static int minPrice = 0;
     static int maxPrice = 0;
+    static ArrayList<String> traits;
+
 
     public CarData() {
     }
 
+    // odpali się w nowym wątku
     public static void filterData() {
-        // robi nową zagregowaną ramkę i przekazuje ją do klasy lista
-        // filter price >= minimum
-        // filter price <= maksimum
+        System.out.println(minPrice + maxPrice);
+    }
 
+    public static void findCars() {
+        // robi nową zagregowaną ramkę i przekazuje ją do klasy lista
+        System.out.println(traits);
     }
 
     public static void setMinPrice(int minPrice) {
