@@ -132,6 +132,44 @@ dfraw <- dfraw %>%
   mutate(Punkty_cena = case_when(is.na(Price) ~ 0,
                                  T ~ 10 - round((Price - min(Price, na.rm = T)) / (max(Price, na.rm = T) - min(Price, na.rm = T)) * 10, 1)))
 
-View(dfraw)
-colnames(dfraw)
 
+
+# Przeznaczenie miasto 
+dfraw <- dfraw %>% 
+  mutate(Punkty_rozmiar_miasto = case_when(is.na(rozmiar) ~ 0,
+                                    rozmiar >= 3000000 ~ 0,
+                                    T ~ 10 - round((rozmiar - min(rozmiar, na.rm = T)) / (2170800 - min(rozmiar, na.rm = T)) * 10, 1))) %>% 
+  mutate(Punkty_miasto = round((Punkty_rozmiar_miasto + Punkty_spalanie_miasto) / 2, 1)) %>% 
+  mutate(Punkty_miasto = round((Punkty_miasto - min(Punkty_miasto)) / (max(Punkty_miasto) - min(Punkty_miasto)) * 10 , 1))
+
+# Przeznaczenie trasy
+dfraw <- dfraw %>% 
+  mutate(Punkty_rozmiar_trasa = case_when(is.na(rozmiar) ~ 0,
+                                          rozmiar >= 3000000 ~ 0,
+                                          T ~ round(abs((rozmiar - median(rozmiar, na.rm = T)) / (max(rozmiar, na.rm = T) - median(rozmiar, na.rm = T))) * 10, 1) * 10)) %>% 
+  mutate(Punkty_paliwo_trasa = case_when(paliwo %in% c("Petrol", "Diesel") ~ 10,
+                                         paliwo == "Hybrid" ~ 7,
+                                         paliwo == "Electric" ~ 2, 
+                                         T ~ 0)) %>% 
+  mutate(Punkty_pojemnosc_baku = case_when(is.na(bak) ~ 0,
+                                           bak >= 1000 ~ 10,
+                                           T ~ round((bak - min(bak, na.rm = T)) / (750 - min(bak, na.rm = T)) * 10, 1))) %>% 
+  mutate(Punkty_trasa = round((Punkty_rozmiar_trasa + Punkty_paliwo_trasa + Punkty_pojemnosc_baku + Punkty_spalanie_trasa) / 4, 1)) %>% 
+  mutate(Punkty_trasa = round((Punkty_trasa - min(Punkty_trasa)) / (max(Punkty_trasa) - min(Punkty_trasa)) * 10, 1))
+
+
+# Przeznaczenie rodzinny
+dfraw <- dfraw %>% 
+  mutate(Punkty_siedzenia = case_when(is.na(siedzenia) ~ 0,
+                                      T ~ round((siedzenia - min(siedzenia, na.rm = T)) / (max(siedzenia, na.rm = T) - min(siedzenia, na.rm = T)) * 10, 1))) %>% 
+  mutate(Punkty_rodzinny = round((Punkty_siedzenia + Punkty_rozmiar) / 2, 1)) %>% 
+  mutate(Punkty_rodzinny = round((Punkty_rodzinny - min(Punkty_rodzinny)) / (max(Punkty_rodzinny) - min(Punkty_rodzinny)) * 10, 1))
+
+
+# Przeznaczenie uniwersalny
+dfraw <- dfraw %>% 
+  mutate(Punkty_uniwersalny = round((Punkty_miasto + Punkty_rodzinny + Punkty_trasa) / 3, 1)) %>% 
+  mutate(Punkty_uniwersalny = round((Punkty_uniwersalny - min(Punkty_uniwersalny)) / (max(Punkty_uniwersalny) - min(Punkty_uniwersalny)) * 10, 1))
+
+
+write.csv(dfraw, "cars_clean.csv", row.names=FALSE)
