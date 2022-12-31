@@ -1,8 +1,13 @@
 library(dplyr)
 
-dfraw <- read.csv("cars_new.csv")
+dfraw <- read.csv("ramka_poprawiona.csv")
 colnames(dfraw)
 
+dfraw <- dfraw %>% 
+  mutate(city_mpg = ifelse(Fuel.Type == "Electric", 70, city_mpg))
+
+dfraw <- dfraw %>%
+  mutate(bak = ifelse(bak > 200, 100, bak))
 # Wyposażenie
 # Patrzę ile jest dodatkowego wyposażenia, normuje (od 15 bo większość ma tego wyposażenie 30-40, żeby były większe różnice)
 # tak, żeby punkty były od 0 do 10
@@ -10,36 +15,33 @@ dfraw <- dfraw %>%
   mutate(Safety = rowSums(dfraw[, 7:59] == "Yes")) %>%
   mutate(Safety = ifelse(Safety < 15, 0, round((Safety - 15) / (max(Safety) - 15) * 10,1)))
 
-
-
 # Spalanie miasto, trasa, średnie
 dfraw <- dfraw %>% 
   mutate(Punkty_spalanie_miasto = ifelse(is.na(city_mpg), 
                                          0, 
-                                         10 - round((city_mpg - min(city_mpg, na.rm = T)) / (max(city_mpg, na.rm = T) - min(city_mpg, na.rm = T)) * 10,1))) %>% 
+                                         round((city_mpg - min(city_mpg, na.rm = T)) / (max(city_mpg, na.rm = T) - min(city_mpg, na.rm = T)) * 10,1))) %>% 
   mutate(Punkty_spalanie_trasa = ifelse(is.na(highway_mpg), 
                                          0, 
-                                         10 - round((highway_mpg - min(highway_mpg, na.rm = T)) / (max(highway_mpg, na.rm = T) - min(highway_mpg, na.rm = T)) * 10,1))) %>% 
+                                         round((highway_mpg - min(highway_mpg, na.rm = T)) / (max(highway_mpg, na.rm = T) - min(highway_mpg, na.rm = T)) * 10,1))) %>% 
   mutate(Punkty_spalanie_srednie = round((Punkty_spalanie_miasto + Punkty_spalanie_trasa) / 2,1))
 
 
 
 # Moc/masa
 dfraw <- dfraw %>% 
-  mutate(moc_masa = ifelse(is.na(waga_lbs) | is.na(power_hp), 
-                           0, 
-                           power_hp / waga_lbs))
-
+  mutate(moc_masa = ifelse(is.na(waga_lbs),
+                           ifelse(is.na(power_hp), 100 / 6000, power_hp / 6000),
+                           ifelse(is.na(power_hp), 100 / waga_lbs, power_hp / waga_lbs)))
 
 # Dynamika 
 dfraw <- dfraw %>%
-  mutate(Punkty_moc_masa = ifelse(moc_masa > 1, 10,
-                                  round((moc_masa - min(moc_masa)) / (0.5997713 - min(moc_masa)) * 10,1))) %>%
+  mutate(Punkty_moc_masa = ifelse(moc_masa > 0.15, 10,
+                                  round((moc_masa - min(moc_masa)) / (0.15 - min(moc_masa)) * 10,1))) %>%
   mutate(Punkty_moment_obrotowy = ifelse(is.na(moment_obrotowy_lb_ft), 
                                         0,
-                                        ifelse( moment_obrotowy_lb_ft >= 4000,
+                                        ifelse( moment_obrotowy_lb_ft >= 400,
                                                 10,
-                                                round((moment_obrotowy_lb_ft - min(moment_obrotowy_lb_ft, na.rm = T)) / (2581 - min(moment_obrotowy_lb_ft, na.rm = T)) * 10,1)))) %>% 
+                                                round((moment_obrotowy_lb_ft - min(moment_obrotowy_lb_ft, na.rm = T)) / (400 - min(moment_obrotowy_lb_ft, na.rm = T)) * 10,1)))) %>% 
   mutate(Punkty_dynamika = round((Punkty_moc_masa + Punkty_moment_obrotowy) / 2, 1)) %>% 
   mutate(Punkty_dynamika = round((Punkty_dynamika - min(Punkty_dynamika)) / (max(Punkty_dynamika) - min(Punkty_dynamika)) * 10,1))
   
@@ -95,8 +97,8 @@ dfraw <- dfraw %>%
            round((Punkty_bezpieczenstwo_wyposazenie - 2)/(20-2) * 10, 1)) %>% 
   mutate(rozmiar = wysokosc_in * dlugosc_in * szerokosc_in) %>%
   mutate(Punkty_rozmiar = case_when(is.na(rozmiar) ~ 0,
-                                    rozmiar >= 3000000 ~ 10,
-                                    T ~ round((rozmiar - min(rozmiar, na.rm = T)) / (2170800 - min(rozmiar, na.rm = T)) * 10, 1))) %>% 
+                                    rozmiar >= 2000000 ~ 10,
+                                    T ~ round((rozmiar - min(rozmiar, na.rm = T)) / (2000000 - min(rozmiar, na.rm = T)) * 10, 1))) %>% 
   mutate(Punkty_bezpieczenstwo = round((Punkty_rozmiar + Punkty_bezpieczenstwo_wyposazenie) / 2,1)) %>% 
   mutate(Punkty_bezpieczenstwo = round((Punkty_bezpieczenstwo - min(Punkty_bezpieczenstwo)) / (max(Punkty_bezpieczenstwo) - min(Punkty_bezpieczenstwo)) * 10,1))
   
@@ -112,8 +114,8 @@ dfraw <- dfraw %>%
                                   naped == "front" ~ 2,
                                   T ~ 0)) %>% 
   mutate(Punkty_cylindry = case_when(is.na(cylindry) ~ 0,
-                                     cylindry > 30 ~ 10,
-                                     T ~ round((cylindry - min(cylindry, na.rm = T)) / (16 - min(cylindry, na.rm = T)) * 10, 1))) %>% 
+                                     cylindry > 8 ~ 10,
+                                     T ~ round((cylindry - min(cylindry, na.rm = T)) / (8 - min(cylindry, na.rm = T)) * 10, 1))) %>% 
   mutate(Punkty_nadwozie_sportowe = case_when(nadwozie %in% c("Coupe", "Convertible") ~ 10,
                                      nadwozie == "Hatchback" ~ 8,
                                      nadwozie == "Sedan" ~ 6,
@@ -130,31 +132,45 @@ dfraw <- dfraw %>%
 # Cena 
 dfraw <- dfraw %>% 
   mutate(Punkty_cena = case_when(is.na(Price) ~ 0,
-                                 T ~ 10 - round((Price - min(Price, na.rm = T)) / (max(Price, na.rm = T) - min(Price, na.rm = T)) * 10, 1)))
+                                 Price > 200000 ~ 0,
+                                 T ~ 10 - round((Price - min(Price, na.rm = T)) / (200000 - min(Price, na.rm = T)) * 10, 1)))
 
 
 
 # Przeznaczenie miasto 
 dfraw <- dfraw %>% 
   mutate(Punkty_rozmiar_miasto = case_when(is.na(rozmiar) ~ 0,
-                                    rozmiar >= 3000000 ~ 0,
-                                    T ~ 10 - round((rozmiar - min(rozmiar, na.rm = T)) / (2170800 - min(rozmiar, na.rm = T)) * 10, 1))) %>% 
-  mutate(Punkty_miasto = round((Punkty_rozmiar_miasto + Punkty_spalanie_miasto) / 2, 1)) %>% 
+                                    rozmiar >= 2000000 ~ 0,
+                                    T ~ 10 - round((rozmiar - min(rozmiar, na.rm = T)) / (2000000 - min(rozmiar, na.rm = T)) * 10, 1))) %>% 
+  mutate(Punkty_nadwozie_miasto = case_when(nadwozie %in% c("Coupe", "Convertible") ~ 6,
+                                              nadwozie == "Hatchback" ~ 10,
+                                              nadwozie == "Van" ~ 2,
+                                              nadwozie == "SUV" ~ 4,
+                                              nadwozie %in% c("Wagon", "Sedan") ~ 6,
+                                              nadwozie == "Truck" ~ 1,
+                                              T ~ 0)) %>% 
+  mutate(Punkty_miasto = round((Punkty_rozmiar_miasto + Punkty_spalanie_miasto + Punkty_nadwozie_miasto) / 3, 1)) %>% 
   mutate(Punkty_miasto = round((Punkty_miasto - min(Punkty_miasto)) / (max(Punkty_miasto) - min(Punkty_miasto)) * 10 , 1))
 
 # Przeznaczenie trasy
 dfraw <- dfraw %>% 
   mutate(Punkty_rozmiar_trasa = case_when(is.na(rozmiar) ~ 0,
-                                          rozmiar >= 3000000 ~ 0,
-                                          T ~ round(abs((rozmiar - median(rozmiar, na.rm = T)) / (max(rozmiar, na.rm = T) - median(rozmiar, na.rm = T))) * 10, 1) * 10)) %>% 
-  mutate(Punkty_paliwo_trasa = case_when(paliwo %in% c("Petrol", "Diesel") ~ 10,
-                                         paliwo == "Hybrid" ~ 7,
+                                          rozmiar >= 2000000 ~ 0,
+                                          T ~ round(abs((rozmiar - median(rozmiar, na.rm = T)) / (2000000 - median(rozmiar, na.rm = T))) * 10, 1) * 10)) %>% 
+  mutate(Punkty_paliwo_trasa = case_when(paliwo %in% c("Petrol", "Diesel", "Hybrid") ~ 10,
                                          paliwo == "Electric" ~ 2, 
                                          T ~ 0)) %>% 
   mutate(Punkty_pojemnosc_baku = case_when(is.na(bak) ~ 0,
-                                           bak >= 1000 ~ 10,
-                                           T ~ round((bak - min(bak, na.rm = T)) / (750 - min(bak, na.rm = T)) * 10, 1))) %>% 
-  mutate(Punkty_trasa = round((Punkty_rozmiar_trasa + Punkty_paliwo_trasa + Punkty_pojemnosc_baku + Punkty_spalanie_trasa) / 4, 1)) %>% 
+                                           bak >= 70 ~ 10,
+                                           T ~ round((bak - min(bak, na.rm = T)) / (70 - min(bak, na.rm = T)) * 10, 1))) %>%
+  mutate(Punkty_nadwozie_trasa = case_when(nadwozie %in% c("Coupe", "Convertible") ~ 7,
+                                            nadwozie == "Hatchback" ~ 3,
+                                            nadwozie == "Van" ~ 8,
+                                            nadwozie == "SUV" ~ 5,
+                                            nadwozie %in% c("Wagon", "Sedan") ~ 10,
+                                            nadwozie == "Truck" ~ 1,
+                                            T ~ 0)) %>%   
+  mutate(Punkty_trasa = round((Punkty_rozmiar_trasa + Punkty_paliwo_trasa +  Punkty_spalanie_trasa + Punkty_nadwozie_trasa + Punkty_pojemnosc_baku) / 5, 1)) %>% 
   mutate(Punkty_trasa = round((Punkty_trasa - min(Punkty_trasa)) / (max(Punkty_trasa) - min(Punkty_trasa)) * 10, 1))
 
 
@@ -162,7 +178,15 @@ dfraw <- dfraw %>%
 dfraw <- dfraw %>% 
   mutate(Punkty_siedzenia = case_when(is.na(siedzenia) ~ 0,
                                       T ~ round((siedzenia - min(siedzenia, na.rm = T)) / (max(siedzenia, na.rm = T) - min(siedzenia, na.rm = T)) * 10, 1))) %>% 
-  mutate(Punkty_rodzinny = round((Punkty_siedzenia + Punkty_rozmiar) / 2, 1)) %>% 
+  mutate(Punkty_nadwozie_rodzinny = case_when(nadwozie %in% c("Coupe", "Convertible") ~ 0,
+                                            nadwozie == "Hatchback" ~ 2,
+                                            nadwozie == "Van" ~ 10,
+                                            nadwozie == "SUV" ~ 8,
+                                            nadwozie %in% c("Wagon", "Sedan") ~ 7,
+                                            nadwozie == "Truck" ~ 4,
+                                            T ~ 0)) %>% 
+  mutate(Punkty_rodzinny = round((Punkty_siedzenia + Punkty_rozmiar + Punkty_nadwozie_rodzinny) / 3, 1)) %>% 
+  
   mutate(Punkty_rodzinny = round((Punkty_rodzinny - min(Punkty_rodzinny)) / (max(Punkty_rodzinny) - min(Punkty_rodzinny)) * 10, 1))
 
 
@@ -171,5 +195,23 @@ dfraw <- dfraw %>%
   mutate(Punkty_uniwersalny = round((Punkty_miasto + Punkty_rodzinny + Punkty_trasa) / 3, 1)) %>% 
   mutate(Punkty_uniwersalny = round((Punkty_uniwersalny - min(Punkty_uniwersalny)) / (max(Punkty_uniwersalny) - min(Punkty_uniwersalny)) * 10, 1))
 
+df <- dfraw %>%
+  select(Brand, Price, Photo, Model.Number, Engine.Type, power_hp,
+         moment_obrotowy_lb_ft, cylindry, skrzynia_biegow, naped, siedzenia,
+         drzwi, waga_lbs, paliwo, city_mpg, highway_mpg, nadwozie, Safety,
+         Punkty_dynamika, Punkty_wlasciwosci_terenowe, Punkty_bezpieczenstwo,
+         Punkty_sportowy_charakter, Punkty_cena, Punkty_miasto, Punkty_trasa,
+         Punkty_rodzinny, Punkty_uniwersalny, Punkty_spalanie_srednie)
 
-write.csv(dfraw, "cars_clean.csv", row.names=FALSE)
+colnames(df) <- c("Brand", "Price", "Photo", "Model", "Engine", "Power",
+                  "Torque_lb_ft", "Cylinders", "Gearbox", "Drivetrain", "Seats",
+                  "Doors", "Weight_lbs", "Fuel", "Consumption_city", 
+                  "Consumption_highway", "Body", "Punkty_wyposazenie", 
+                  "Punkty_dynamika",             "Punkty_wlasciwosci_terenowe",
+                  "Punkty_bezpieczenstwo" ,      "Punkty_sportowy_charakter"  ,
+                  "Punkty_cena" ,                "Punkty_miasto"              ,
+                  "Punkty_trasa" ,               "Punkty_rodzinny"            ,
+                  "Punkty_uniwersalny",          "Punkty_spalanie_srednie" )
+
+View(df)
+write.csv(dfraw, "cars_test.csv", row.names=FALSE)
