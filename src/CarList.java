@@ -1,3 +1,5 @@
+import tech.tablesaw.api.Table;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +13,7 @@ public class CarList extends JPanel implements ActionListener {
     static AppGui appFrame;
     JPanel listPanel, buttonPanel;
     JButton backButton, forwardButton, menuButton;
-    // jesszcze pole z ramką
+    static Table Cars;
 
     public CarList(AppGui frame) {
         if (i == 0) {
