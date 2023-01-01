@@ -1,5 +1,4 @@
 import tech.tablesaw.api.*;
-import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.csv.CsvReadOptions;
 
 import java.io.IOException;
@@ -20,27 +19,24 @@ public abstract class CarData{
 
     // odpali się w nowym wątku
     public static void filterData() {
-        filteredCars = mainTable.where(mainTable.numberColumn("Price").isIn(minPrice, maxPrice));
+        filteredCars = mainTable.where(mainTable.numberColumn("Pricing").isBetweenInclusive(minPrice, maxPrice));
         // Zmienić nazwę odpowiedniej kolumny z punktami z przeznaczeniem na Practicality (np. użytkownik wybierze
-        // że chce do miasta to przeznaczenie miasto ma mieć nazwę Pracicality.
+        // że chce do miasta to przeznaczenie miasto ma mieć nazwę Practicality.
     }
 
     public static void findCars() {
         // robi nową zagregowaną ramkę i przekazuje ją do klasy lista
-        System.out.println(traits);
-    }
-
-
-    public static void findCars2() {
-        ArrayList<String> columnNames = traits;
-        int n = columnNames.size();
+        int n = traits.size();
         double h = 1.0 / n;
         Table result = filteredCars;
         for (int i = 0; i < n; i++) {
-            result.numberColumn("Wynik").add(filteredCars.numberColumn(columnNames.get(i)).multiply(1-h*i));
+            result.replaceColumn("Result", result.numberColumn("Result").add(filteredCars.numberColumn(traits.get(i)).multiply(1-h*i)));
+            result.column(27).setName("Result");
         }
-        CarList.Cars = result.sortDescendingOn("Wynik");
+        CarList.listCount = 0;
+        CarList.Cars = result.sortDescendingOn("Result");
     }
+
 
     public static void loadData(){
         ColumnType[] types = {ColumnType.STRING, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE};

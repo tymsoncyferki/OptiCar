@@ -1,4 +1,5 @@
 import org.imgscalr.Scalr;
+import tech.tablesaw.api.Table;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,10 +16,16 @@ public class Car {
     Random random = new Random();
     String name;
     int price;
+    String photo;
+    String engineInfo;
+    int power;
+    String fuelType;
+    String body;
 
-    public Car(int i) {
-        name = "Special car no. " + i;
-        price = random.nextInt(200000)+50000;
+    public Car(Table carRow) {
+        name = carRow.get(0, "Model");
+        price = (int) Double.parseDouble(carRow.get(0, "Pricing"));
+        photo = carRow.get(0, "Photo");
     }
 
     public JPanel carInfo() throws IOException {
@@ -37,7 +44,7 @@ public class Car {
 
         JPanel photoPanel = new JPanel();
         photoPanel.setPreferredSize(new Dimension(260, 140));
-        URL url = new URL("https://www.ccarprice.com/products/Honda_Ridgeline_Black_Edition_2023.jpg");
+        URL url = new URL(photo);
         BufferedImage originalImage = ImageIO.read(url);
         ImageIcon icon =  new ImageIcon(Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 260, 140, Scalr.OP_ANTIALIAS));
         JLabel carPhoto = new JLabel(icon);

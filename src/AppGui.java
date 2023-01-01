@@ -8,8 +8,9 @@ import java.util.ArrayList;
 // nasze główne okno, będą w nim zaimplementowane strony do filtrowania i ustalania cech
 public class AppGui extends JFrame implements ActionListener {
 
-    static CardLayout cardLayout = new CardLayout();
-    JPanel firstPage, secondPage;
+    static CardLayout mainLayout = new CardLayout();
+    static CardLayout listLayout = new CardLayout();
+    JPanel firstPage, secondPage, thirdPage;
     // firstPage
     JPanel dataPanel, buttonPanel1;
     JTextField minPrice, maxPrice;
@@ -23,9 +24,8 @@ public class AppGui extends JFrame implements ActionListener {
         super("findcar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1200, 900));
-        //setExtendedState(MAXIMIZED_BOTH);
         setLocation(0, 0);
-        setLayout(cardLayout);
+        setLayout(mainLayout);
 
         // panel 1
         firstPage = new JPanel();
@@ -62,11 +62,6 @@ public class AppGui extends JFrame implements ActionListener {
         secondPage.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
         secondPage.setLayout(new BorderLayout());
 
-        // information
-//        traitPanel = new TraitTest();
-//        traitPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 100));
-//        secondPage.add(traitPanel, BorderLayout.NORTH);
-
         // drag and drop
         dragPanel = new DragAndDropList();
         secondPage.add(dragPanel, BorderLayout.CENTER);
@@ -88,6 +83,12 @@ public class AppGui extends JFrame implements ActionListener {
         add(secondPage);
         // end panel2
 
+        // panel3
+        thirdPage = new JPanel();
+        thirdPage.setLayout(listLayout);
+        add(thirdPage);
+        // end panel3
+
         pack();
     }
 
@@ -98,18 +99,21 @@ public class AppGui extends JFrame implements ActionListener {
             CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
             CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
             CarData.filterData();
-            cardLayout.next(this.getContentPane());
+            mainLayout.next(this.getContentPane());
         }
 
         if (e.getActionCommand().equals("back")) {
-            cardLayout.previous(this.getContentPane());
+            mainLayout.previous(this.getContentPane());
         }
         if (e.getActionCommand().equals("search")) {
+            thirdPage.removeAll();
             CarData.traits = new ArrayList<>(DragAndDropList.dndList.getSelectedValuesList());
             CarData.findCars();
-            CarList carsList = new CarList(this);
-            this.add(carsList);
-            cardLayout.next(this.getContentPane());
+            CarList.frame = this;
+            CarList carsList = new CarList();
+
+            thirdPage.add(carsList);
+            mainLayout.next(this.getContentPane());
         }
     }
 
@@ -118,6 +122,7 @@ public class AppGui extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        CarData.loadData();
         FlatLightLaf.setup();
         AppGui app = new AppGui();
         app.showGui();
