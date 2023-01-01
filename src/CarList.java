@@ -64,9 +64,9 @@ public class CarList extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("back")) {
             if (listNumber == 1) {
-                //
+
                 AppGui.mainLayout.first(frame.getContentPane());
-                AppGui.mainLayout.next(frame.getContentPane());
+                //AppGui.mainLayout.next(frame.getContentPane());
             } else {
                 AppGui.listLayout.previous(frame.thirdPage);
                 listNumber -= 1;
