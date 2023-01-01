@@ -7,9 +7,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class CarList extends JPanel implements ActionListener {
-    // panel z listą kilku samochodów i przyciskami
 
-    static int listCount;
+    static int listCount = 0;
     static int listNumber = 0;
     static AppGui frame;
     JPanel listPanel, buttonPanel;
@@ -21,13 +20,11 @@ public class CarList extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         listPanel = new JPanel();
-        listPanel.setPreferredSize(new Dimension(400, 800));
+        listPanel.setPreferredSize(new Dimension(400, 3000));
         GridLayout gridLayout = new GridLayout(0,1);
         gridLayout.setVgap(3);
         listPanel.setLayout(gridLayout);
-        // każda kolejna instancja klasy będzie brać kolejne 10 (lub inną liczbę) samochodów, w tym celu pole statyczne 1
-        for (int j = listCount *5; j < listCount *5+5; j++) {
-            //Table carRow = Cars.rows(j);
+        for (int j = listCount * 20; j < listCount * 20 + 20; j++) {
             Car car = new Car(Cars.rows(j));
             try {
                 listPanel.add(car.carInfo());
@@ -35,9 +32,9 @@ public class CarList extends JPanel implements ActionListener {
                 e.printStackTrace();
             }
         }
-        this.add(listPanel, BorderLayout.NORTH);
-        listCount++;
-        listNumber++;
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        this.add(scrollPane);
 
         // buttons
         buttonPanel = new JPanel();
@@ -58,19 +55,20 @@ public class CarList extends JPanel implements ActionListener {
         buttonPanel.add(forwardButton);
         this.add(buttonPanel, BorderLayout.SOUTH);
 
+        listCount++;
+        listNumber++;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("back")) {
             if (listNumber == 1) {
-
                 AppGui.mainLayout.first(frame.getContentPane());
-                //AppGui.mainLayout.next(frame.getContentPane());
             } else {
                 AppGui.listLayout.previous(frame.thirdPage);
                 listNumber -= 1;
             }
+            //System.out.println("count: " + listCount + ", number: " + listNumber);
         }
         if (e.getActionCommand().equals("next")) {
             if (listNumber < listCount) {

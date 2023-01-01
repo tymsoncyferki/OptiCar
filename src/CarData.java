@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class CarData{
-    // klasa do przechowywania danych z metodą która agreguje ramkę
 
     static double minPrice = 0;
     static double maxPrice = 10000000;
@@ -14,10 +13,8 @@ public abstract class CarData{
     static Table filteredCars;
 
     public CarData() {
-
     }
 
-    // odpali się w nowym wątku
     public static void filterData() {
         filteredCars = mainTable.where(mainTable.numberColumn("Pricing").isBetweenInclusive(minPrice, maxPrice));
         // Zmienić nazwę odpowiedniej kolumny z punktami z przeznaczeniem na Practicality (np. użytkownik wybierze
@@ -25,7 +22,6 @@ public abstract class CarData{
     }
 
     public static void findCars() {
-        // robi nową zagregowaną ramkę i przekazuje ją do klasy lista
         int n = traits.size();
         double h = 1.0 / n;
         Table result = filteredCars;
@@ -34,6 +30,7 @@ public abstract class CarData{
             result.column(27).setName("Result");
         }
         CarList.listCount = 0;
+        CarList.listNumber = 0;
         CarList.Cars = result.sortDescendingOn("Result");
     }
 

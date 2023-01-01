@@ -10,8 +10,6 @@ import java.net.URL;
 import java.util.Random;
 
 public class Car {
-    // pytanie czy dane do wyświetlania podawać jako argumenty do metod czy tworzyć za każdym razem nowe instancje samochodów
-    // i ustawiać wartości określonych pól?
 
     Random random = new Random();
     String name;
@@ -43,7 +41,7 @@ public class Car {
         mainPanel.add(infoPanel, BorderLayout.EAST);
 
         JPanel photoPanel = new JPanel();
-        photoPanel.setPreferredSize(new Dimension(260, 140));
+        photoPanel.setSize(new Dimension(260, 140));
         URL url = new URL(photo);
         BufferedImage originalImage = ImageIO.read(url);
         ImageIcon icon =  new ImageIcon(Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 260, 140, Scalr.OP_ANTIALIAS));

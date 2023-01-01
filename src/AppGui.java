@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-// nasze główne okno, będą w nim zaimplementowane strony do filtrowania i ustalania cech
 public class AppGui extends JFrame implements ActionListener {
 
     static CardLayout mainLayout = new CardLayout();
@@ -23,17 +22,16 @@ public class AppGui extends JFrame implements ActionListener {
     public AppGui() {
         super("findcar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(1200, 900));
+        setPreferredSize(new Dimension(1000, 600));
         setLocation(0, 0);
         setLayout(mainLayout);
 
         // panel 1
         firstPage = new JPanel();
-        firstPage.setPreferredSize(new Dimension(1600, 900));
+        firstPage.setPreferredSize(new Dimension(1000, 600));
         firstPage.setLayout(new BorderLayout());
 
         // collecting data
-        // tutaj zostanie wrzucony panel ze wszystkimi komponentami zbierającymi dane
         dataPanel = new JPanel();
         minPrice = new JTextField("0");
         minPrice.setPreferredSize(new Dimension(90, 30));
@@ -95,7 +93,6 @@ public class AppGui extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("forward")) {
-            // zczytuje dane które podał użytkownik i ustawia w odpowiednich polach klasy dane
             CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
             CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
             CarData.filterData();
@@ -111,7 +108,6 @@ public class AppGui extends JFrame implements ActionListener {
             CarData.findCars();
             CarList.frame = this;
             CarList carsList = new CarList();
-
             thirdPage.add(carsList);
             mainLayout.next(this.getContentPane());
         }
