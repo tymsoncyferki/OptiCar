@@ -11,7 +11,6 @@ import java.util.Random;
 
 public class Car {
 
-    Random random = new Random();
     String name;
     int price;
     String photo;
@@ -19,6 +18,8 @@ public class Car {
     int power;
     String fuelType;
     String body;
+    //todo
+    // i wszystkie inne potrzebne...
 
     public Car(Table carRow) {
         name = carRow.get(0, "Model");
@@ -27,6 +28,8 @@ public class Car {
     }
 
     public JPanel carInfo() throws IOException {
+        //todo
+        // zmienić, żeby się ładnie wyświetlało
         JPanel mainPanel = new JPanel();
         mainPanel.setPreferredSize(new Dimension(400, 150));
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -52,7 +55,9 @@ public class Car {
         return mainPanel;
     }
 
-
+    //todo
+    // po kliknięciu odpowiedniego przycisku z carInfo wyświetli się panel z szczegółowymi danymi który będzie można
+    // zamknąc "iksem"
     public JPanel carInfoDetailed() {
         return null;
     }

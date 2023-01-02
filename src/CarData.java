@@ -16,18 +16,19 @@ public abstract class CarData{
     }
 
     public static void filterData() {
-        filteredCars = mainTable.where(mainTable.numberColumn("Pricing").isBetweenInclusive(minPrice, maxPrice));
+        filteredCars = mainTable
+                .where(mainTable.numberColumn("Pricing").isBetweenInclusive(minPrice, maxPrice));
         //todo
         // Zmienić nazwę odpowiedniej kolumny z punktami z przeznaczeniem na Practicality (np. użytkownik wybierze
         // że chce do miasta to punkty_przeznaczenie_miasto ma mieć nazwę Practicality.
     }
 
     public static void findCars() {
-        int n = traits.size();
-        double h = 1.0 / n;
+        int size = traits.size();
+        double change = 1.0 / size;
         Table result = filteredCars;
-        for (int i = 0; i < n; i++) {
-            result.replaceColumn("Result", result.numberColumn("Result").add(filteredCars.numberColumn(traits.get(i)).multiply(1-h*i)));
+        for (int i = 0; i < size; i++) {
+            result.replaceColumn("Result", result.numberColumn("Result").add(filteredCars.numberColumn(traits.get(i)).multiply(1-change*i)));
             result.column(27).setName("Result");
         }
         CarList.listCount = 0;

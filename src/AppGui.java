@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class AppGui extends JFrame implements ActionListener {
 
-    static CardLayout mainLayout = new CardLayout();
-    static CardLayout listLayout = new CardLayout();
+    CardLayout mainLayout = new CardLayout();
+    CardLayout listLayout = new CardLayout();
     JPanel firstPage, secondPage, thirdPage;
     // firstPage
     JPanel dataPanel, buttonPanel1;
@@ -34,6 +34,8 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.setLayout(new BorderLayout());
 
         // collecting data
+        //todo
+        // i oczywiście trzeba ogarnąć przypadki jak użytkownik wpisze coś innego niż liczby, albo nic nie wpisze
         dataPanel = new JPanel();
         minPrice = new JTextField("0");
         minPrice.setPreferredSize(new Dimension(90, 30));
@@ -117,7 +119,7 @@ public class AppGui extends JFrame implements ActionListener {
         }
         if (e.getActionCommand().equals("search")) {
             loadingPanel.setVisible(true);
-            Thread t1 = new Thread(new Runnable() {
+            Thread listingCars = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     thirdPage.removeAll();
@@ -130,7 +132,7 @@ public class AppGui extends JFrame implements ActionListener {
                     loadingPanel.setVisible(false);
                 }
             });
-            t1.start();
+            listingCars.start();
 
         }
     }

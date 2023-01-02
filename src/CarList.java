@@ -16,7 +16,7 @@ public class CarList extends JPanel implements ActionListener {
     JPanel listPanel, buttonPanel;
     JButton backButton, forwardButton, menuButton;
     JPanel loadingPanel;
-    ImageIcon loading = new ImageIcon("loadgif.gif");
+    static final ImageIcon loading = new ImageIcon("loadgif.gif");
 
     public CarList() {
 
@@ -81,29 +81,29 @@ public class CarList extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("back")) {
             if (listNumber == 1) {
-                AppGui.mainLayout.first(frame.getContentPane());
+                frame.mainLayout.first(frame.getContentPane());
             } else {
-                AppGui.listLayout.previous(frame.thirdPage);
+                frame.listLayout.previous(frame.thirdPage);
                 listNumber -= 1;
             }
             //System.out.println("count: " + listCount + ", number: " + listNumber);
         }
         if (e.getActionCommand().equals("next")) {
             if (listNumber < listCount) {
-                AppGui.listLayout.next(frame.thirdPage);
+                frame.listLayout.next(frame.thirdPage);
                 listNumber += 1;
             } else {
                 loadingPanel.setVisible(true);
                 new Thread(() -> {
                     CarList carsList = new CarList();
                     frame.thirdPage.add(carsList);
-                    AppGui.listLayout.next(frame.thirdPage);
+                    frame.listLayout.next(frame.thirdPage);
                     loadingPanel.setVisible(false);
                 }).start();
             }
         }
         if (e.getActionCommand().equals("menu")) {
-            AppGui.mainLayout.first(frame.getContentPane());
+            frame.mainLayout.first(frame.getContentPane());
         }
     }
 }
