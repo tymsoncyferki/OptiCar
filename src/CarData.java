@@ -17,8 +17,9 @@ public abstract class CarData{
 
     public static void filterData() {
         filteredCars = mainTable.where(mainTable.numberColumn("Pricing").isBetweenInclusive(minPrice, maxPrice));
+        //todo
         // Zmienić nazwę odpowiedniej kolumny z punktami z przeznaczeniem na Practicality (np. użytkownik wybierze
-        // że chce do miasta to przeznaczenie miasto ma mieć nazwę Practicality.
+        // że chce do miasta to punkty_przeznaczenie_miasto ma mieć nazwę Practicality.
     }
 
     public static void findCars() {

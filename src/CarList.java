@@ -5,15 +5,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CarList extends JPanel implements ActionListener {
 
     static int listCount = 0;
     static int listNumber = 0;
     static AppGui frame;
+    static Table Cars;
     JPanel listPanel, buttonPanel;
     JButton backButton, forwardButton, menuButton;
-    static Table Cars;
+    JPanel loadingPanel;
+    ImageIcon loading = new ImageIcon("loadgif.gif");
 
     public CarList() {
 
@@ -25,6 +28,8 @@ public class CarList extends JPanel implements ActionListener {
         gridLayout.setVgap(3);
         listPanel.setLayout(gridLayout);
         for (int j = listCount * 20; j < listCount * 20 + 20; j++) {
+            //todo
+            // jak j jest większe niż liczba wierszy to już nic nie wyświetlać i usunąć przycisk next
             Car car = new Car(Cars.rows(j));
             try {
                 listPanel.add(car.carInfo());
@@ -34,7 +39,20 @@ public class CarList extends JPanel implements ActionListener {
         }
         JScrollPane scrollPane = new JScrollPane(listPanel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        this.add(scrollPane);
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setLayout(new OverlayLayout(layeredPane));
+        layeredPane.add(scrollPane, new Integer(0));
+
+        // loading
+        loadingPanel = new JPanel();
+        loadingPanel.setLayout(new BorderLayout());
+        JLabel loadingGif = new JLabel(loading);
+        loadingPanel.add(loadingGif);
+        loadingPanel.setVisible(false);
+        layeredPane.add(loadingPanel, new Integer(1));
+
+        add(layeredPane);
+
 
         // buttons
         buttonPanel = new JPanel();
@@ -53,7 +71,7 @@ public class CarList extends JPanel implements ActionListener {
         forwardButton.setPreferredSize(new Dimension(90, 30));
         forwardButton.addActionListener(this);
         buttonPanel.add(forwardButton);
-        this.add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         listCount++;
         listNumber++;
@@ -75,9 +93,13 @@ public class CarList extends JPanel implements ActionListener {
                 AppGui.listLayout.next(frame.thirdPage);
                 listNumber += 1;
             } else {
-                CarList carsList = new CarList();
-                frame.thirdPage.add(carsList);
-                AppGui.listLayout.next(frame.thirdPage);
+                loadingPanel.setVisible(true);
+                new Thread(() -> {
+                    CarList carsList = new CarList();
+                    frame.thirdPage.add(carsList);
+                    AppGui.listLayout.next(frame.thirdPage);
+                    loadingPanel.setVisible(false);
+                }).start();
             }
         }
         if (e.getActionCommand().equals("menu")) {

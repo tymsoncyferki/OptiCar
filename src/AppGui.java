@@ -16,8 +16,10 @@ public class AppGui extends JFrame implements ActionListener {
     JButton forwardButton;
     JLabel price;
     // secondPage
-    JPanel buttonPanel2, dragPanel;
+    JPanel buttonPanel2, dragPanel, loadingPanel;
     JButton backButton, searchButton;
+    JLayeredPane layeredPane;
+    JLabel loadingGif;
 
     public AppGui() {
         super("findcar");
@@ -78,7 +80,18 @@ public class AppGui extends JFrame implements ActionListener {
         buttonPanel2.add(searchButton);
         secondPage.add(buttonPanel2, BorderLayout.SOUTH);
 
-        add(secondPage);
+        layeredPane = new JLayeredPane();
+        layeredPane.setLayout(new OverlayLayout(layeredPane));
+        layeredPane.add(secondPage, new Integer(0));
+
+        loadingPanel = new JPanel();
+        loadingPanel.setLayout(new BorderLayout());
+        ImageIcon loading = new ImageIcon("loadgif.gif");
+        loadingGif = new JLabel(loading);
+        loadingPanel.add(loadingGif);
+        loadingPanel.setVisible(false);
+        layeredPane.add(loadingPanel, new Integer(1));
+        add(layeredPane);
         // end panel2
 
         // panel3
@@ -103,13 +116,22 @@ public class AppGui extends JFrame implements ActionListener {
             mainLayout.previous(this.getContentPane());
         }
         if (e.getActionCommand().equals("search")) {
-            thirdPage.removeAll();
-            CarData.traits = new ArrayList<>(DragAndDropList.dndList.getSelectedValuesList());
-            CarData.findCars();
-            CarList.frame = this;
-            CarList carsList = new CarList();
-            thirdPage.add(carsList);
-            mainLayout.next(this.getContentPane());
+            loadingPanel.setVisible(true);
+            Thread t1 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    thirdPage.removeAll();
+                    CarData.traits = new ArrayList<>(DragAndDropList.dndList.getSelectedValuesList());
+                    CarData.findCars();
+                    CarList.frame = AppGui.this;
+                    CarList carsList = new CarList();
+                    thirdPage.add(carsList);
+                    mainLayout.next(AppGui.this.getContentPane());
+                    loadingPanel.setVisible(false);
+                }
+            });
+            t1.start();
+
         }
     }
 
