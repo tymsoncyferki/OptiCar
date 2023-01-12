@@ -33,7 +33,7 @@ public class AppGui extends JFrame implements ActionListener {
         // panel 1
         firstPage = new JPanel();
         firstPage.setPreferredSize(new Dimension(1000, 600));
-        firstPage.setLayout(new BorderLayout());
+        firstPage.setLayout(new BoxLayout(firstPage, BoxLayout.PAGE_AXIS));
 
         // collecting data
         //todo
@@ -47,16 +47,13 @@ public class AppGui extends JFrame implements ActionListener {
         dataPanel.add(price);
         dataPanel.add(minPrice);
         dataPanel.add(maxPrice);
-        firstPage.add(dataPanel, BorderLayout.NORTH);
+        dataPanel.setMaximumSize(new Dimension(300,30));
+        firstPage.add(dataPanel);
+        firstPage.add(Box.createRigidArea(new Dimension(0,50)));
 
-        // buttons
-        forwardButton = new JButton("Next");
-        forwardButton.setActionCommand("forward");
-        forwardButton.setPreferredSize(new Dimension(90, 30));
-        forwardButton.addActionListener(this);
-        buttonPanel1 = new JPanel();
-        buttonPanel1.add(forwardButton);
-        firstPage.add(buttonPanel1, BorderLayout.SOUTH);
+
+
+
 
         // combo box
 
@@ -71,38 +68,52 @@ public class AppGui extends JFrame implements ActionListener {
         practicalityPanel = new JPanel();
         practicalityPanel.add(practicalityLabel);
         practicalityPanel.add(practicalityCombo);
+        practicalityPanel.setMaximumSize(new Dimension(300,100));
+        firstPage.add(practicalityPanel);
+        firstPage.add(Box.createRigidArea(new Dimension(0,50)));
 
 
         // fuel panel
         fuelPanel = new JPanel();
-        fuelLabel = new JLabel("Wybierz rodzaj paliwa");
+        fuelLabel = new JLabel("Wybierz rodzaj paliwa: ");
+        fuelLabel.setPreferredSize(new Dimension(135,20));
         fuelPanel.add(fuelLabel);
 
-        petrolCheck = new JCheckBox("Benzyna");
-        hybridCheck = new JCheckBox("Hybrydowe");
-        electricCheck = new JCheckBox("Elektryczne");
-        dieselCheck = new JCheckBox("Diesel");
+        petrolCheck = new JCheckBox("Benzyna",false);
+        hybridCheck = new JCheckBox("Hybrydowe",false);
+        electricCheck = new JCheckBox("Elektryczne",false);
+        dieselCheck = new JCheckBox("Diesel",false);
 
-        fuelLabel.setPreferredSize(new Dimension(80,20));
-        petrolCheck.setPreferredSize(new Dimension(80,20));
-        hybridCheck.setPreferredSize(new Dimension(80,20));
-        electricCheck.setPreferredSize(new Dimension(80,20));
-        dieselCheck.setPreferredSize(new Dimension(80,20));
+        petrolCheck.setPreferredSize(new Dimension(70,20));
+        hybridCheck.setPreferredSize(new Dimension(85,20));
+        electricCheck.setPreferredSize(new Dimension(85,20));
+        dieselCheck.setPreferredSize(new Dimension(100,20));
+
+        petrolCheck.addActionListener(this);
+        hybridCheck.addActionListener(this);
+        electricCheck.addActionListener(this);
+        dieselCheck.addActionListener(this);
+
 
         fuelPanel.add(petrolCheck);
         fuelPanel.add(hybridCheck);
         fuelPanel.add(electricCheck);
         fuelPanel.add(dieselCheck);
+        fuelPanel.setMaximumSize(new Dimension(700,30));
 
-        centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.add(fuelPanel);
-        centerPanel.add(practicalityPanel);
+        firstPage.add(fuelPanel);
+        firstPage.add(Box.createVerticalGlue());
 
+        // buttons
+        forwardButton = new JButton("Next");
+        forwardButton.setActionCommand("forward");
+        forwardButton.setPreferredSize(new Dimension(90, 30));
+        forwardButton.addActionListener(this);
+        buttonPanel1 = new JPanel();
+        buttonPanel1.add(forwardButton);
+        buttonPanel1.setMaximumSize(new Dimension(90,30));
 
-        firstPage.add(centerPanel, BorderLayout.EAST);
-
-
+        firstPage.add(buttonPanel1);
 
 
         add(firstPage);
@@ -160,7 +171,10 @@ public class AppGui extends JFrame implements ActionListener {
             CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
             CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
             CarData.practicality = (String) practicalityCombo.getSelectedItem();
+
             System.out.println(CarData.practicality);
+            System.out.println(CarData.fuel);
+
             CarData.filterData();
             mainLayout.next(this.getContentPane());
         }
@@ -186,6 +200,39 @@ public class AppGui extends JFrame implements ActionListener {
             listingCars.start();
 
         }
+        if (e.getSource().equals(petrolCheck)){
+            if (petrolCheck.isSelected()){
+                CarData.fuel.add(petrolCheck.getText());
+            }else {
+                CarData.fuel.remove(petrolCheck.getText());
+            }
+
+        }
+        if (e.getSource().equals(hybridCheck)){
+            if (hybridCheck.isSelected()){
+                CarData.fuel.add(hybridCheck.getText());
+            }else {
+                CarData.fuel.remove(hybridCheck.getText());
+            }
+
+        }
+        if (e.getSource().equals(dieselCheck)){
+            if (dieselCheck.isSelected()){
+                CarData.fuel.add(dieselCheck.getText());
+            }else {
+                CarData.fuel.remove(dieselCheck.getText());
+            }
+
+        }
+        if (e.getSource().equals(electricCheck)){
+            if (electricCheck.isSelected()){
+                CarData.fuel.add(electricCheck.getText());
+            }else {
+                CarData.fuel.remove(electricCheck.getText());
+            }
+
+        }
+
 
     }
 

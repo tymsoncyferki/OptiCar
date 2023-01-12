@@ -10,6 +10,7 @@ public abstract class CarData{
     static double maxPrice = 10000000;
     static ArrayList<String> traits;
     static String practicality;
+    static ArrayList<String> fuel = new ArrayList<>();
     static Table mainTable;
     static Table filteredCars;
 
