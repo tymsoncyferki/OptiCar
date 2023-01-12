@@ -3,6 +3,7 @@ import tech.tablesaw.io.csv.CsvReadOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class CarData{
 
@@ -25,9 +26,20 @@ public abstract class CarData{
         filteredCars = filteredCars.where(filteredCars.stringColumn("Fuel").isIn(fuel));
 
         filteredCars = filteredCars.where(filteredCars.stringColumn("Gearbox").isIn(gearBox));
-        //todo
-        // Zmienić nazwę odpowiedniej kolumny z punktami z przeznaczeniem na Practicality (np. użytkownik wybierze
-        // że chce do miasta to punkty_przeznaczenie_miasto ma mieć nazwę Practicality.
+
+        if (Objects.equals(practicality, "Miasto")){
+            filteredCars.column("Punkty_miasto").setName("Practicality");
+        }
+        else if (Objects.equals(practicality, "Trasa")){
+            filteredCars.column("Punkty_trasa").setName("Practicality");
+        }
+        else if (Objects.equals(practicality, "Rodzinny")){
+            filteredCars.column("Punkty_rodzinny").setName("Practicality");
+        }
+        else{
+            filteredCars.column("Punkty_uniwersalny").setName("Practicality");
+        }
+
 
     }
 

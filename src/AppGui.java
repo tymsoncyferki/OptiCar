@@ -212,7 +212,7 @@ public class AppGui extends JFrame implements ActionListener {
                 CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
                 CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
 
-                if (CarData.maxPrice < 1550){
+                if (CarData.maxPrice < 1550 | CarData.minPrice > 15000000){
                     throw new MaxPriceException();
                 }
                 CarData.practicality = (String) practicalityCombo.getSelectedItem();
@@ -225,7 +225,6 @@ public class AppGui extends JFrame implements ActionListener {
                 CarData.filterData();
                 mainLayout.next(this.getContentPane());
                 errorlabel.setText("");
-                System.out.println(CarData.gearBox);
             }
             catch (NumberFormatException p) {
 

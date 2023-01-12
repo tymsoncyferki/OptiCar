@@ -26,6 +26,7 @@ public class Car {
         name = carRow.get(0, "Model");
         price = (int) Double.parseDouble(carRow.get(0, "Pricing"));
         photo = carRow.get(0, "Photo");
+        fuelType = carRow.get(0,"Fuel");
     }
 
     public JPanel carInfo() throws IOException {
@@ -42,6 +43,8 @@ public class Car {
         JLabel carPrice = new JLabel("Price: " + price);
         carPrice.setPreferredSize(new Dimension(200, 20));
         infoPanel.add(carPrice);
+//        JLabel carFuel = new JLabel("Fuel  type: " + fuelType);
+//        infoPanel.add(carFuel);
         mainPanel.add(infoPanel, BorderLayout.EAST);
 
         JPanel photoPanel = new JPanel();
