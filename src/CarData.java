@@ -11,6 +11,7 @@ public abstract class CarData{
     static ArrayList<String> traits;
     static String practicality;
     static ArrayList<String> fuel = new ArrayList<>();
+    static ArrayList<String> gearBox = new ArrayList<>();
     static Table mainTable;
     static Table filteredCars;
 
@@ -20,9 +21,14 @@ public abstract class CarData{
     public static void filterData() {
         filteredCars = mainTable
                 .where(mainTable.numberColumn("Pricing").isBetweenInclusive(minPrice, maxPrice));
+
+        filteredCars = filteredCars.where(filteredCars.stringColumn("Fuel").isIn(fuel));
+
+        filteredCars = filteredCars.where(filteredCars.stringColumn("Gearbox").isIn(gearBox));
         //todo
         // Zmienić nazwę odpowiedniej kolumny z punktami z przeznaczeniem na Practicality (np. użytkownik wybierze
         // że chce do miasta to punkty_przeznaczenie_miasto ma mieć nazwę Practicality.
+
     }
 
     public static void findCars() {

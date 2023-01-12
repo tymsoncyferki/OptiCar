@@ -3,6 +3,7 @@ import tech.tablesaw.api.Table;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;

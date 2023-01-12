@@ -11,12 +11,12 @@ public class AppGui extends JFrame implements ActionListener {
     CardLayout listLayout = new CardLayout();
     JPanel firstPage, secondPage, thirdPage;
     // firstPage
-    JPanel dataPanel, buttonPanel1, practicalityPanel, fuelPanel, errorPanel;
+    JPanel dataPanel, buttonPanel1, practicalityPanel, fuelPanel, errorPanel, gearBoxPanel;
     JTextField minPrice, maxPrice;
     JButton forwardButton;
-    JLabel price, practicalityLabel, fuelLabel, errorlabel;
+    JLabel price, practicalityLabel, fuelLabel, errorlabel, gearBoxLabel;
     JComboBox<String> practicalityCombo;
-    JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck;
+    JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck, cvtCheck, automaticCheck, manulaCheck;
     // secondPage
     JPanel buttonPanel2, dragPanel, loadingPanel;
     JButton backButton, searchButton;
@@ -37,7 +37,8 @@ public class AppGui extends JFrame implements ActionListener {
 
         // collecting data
         //todo
-        // i oczywiście trzeba ogarnąć przypadki jak użytkownik wpisze coś innego niż liczby, albo nic nie wpisze
+        // przypadek gdy początkowa cena jest zbyt wysoka
+        //
         dataPanel = new JPanel();
         minPrice = new JTextField("0");
         minPrice.setPreferredSize(new Dimension(90, 30));
@@ -64,7 +65,7 @@ public class AppGui extends JFrame implements ActionListener {
         practicalityCombo.addItem("Uniwersalny");
         practicalityCombo.setPreferredSize(new Dimension(160,50));
         practicalityCombo.addActionListener(this);
-        practicalityLabel = new JLabel("<html><center>Wybierz</center>Przeznaczenie:</html>");
+        practicalityLabel = new JLabel("Wybierz przeznaczenie: ");
         practicalityPanel = new JPanel();
         practicalityPanel.add(practicalityLabel);
         practicalityPanel.add(practicalityCombo);
@@ -79,12 +80,12 @@ public class AppGui extends JFrame implements ActionListener {
         fuelLabel.setPreferredSize(new Dimension(135,20));
         fuelPanel.add(fuelLabel);
 
-        petrolCheck = new JCheckBox("Benzyna",false);
-        hybridCheck = new JCheckBox("Hybrydowe",false);
-        electricCheck = new JCheckBox("Elektryczne",false);
+        petrolCheck = new JCheckBox("Petrol",false);
+        hybridCheck = new JCheckBox("Hybrid",false);
+        electricCheck = new JCheckBox("Electric",false);
         dieselCheck = new JCheckBox("Diesel",false);
 
-        petrolCheck.setPreferredSize(new Dimension(70,20));
+        petrolCheck.setPreferredSize(new Dimension(60,20));
         hybridCheck.setPreferredSize(new Dimension(85,20));
         electricCheck.setPreferredSize(new Dimension(85,20));
         dieselCheck.setPreferredSize(new Dimension(100,20));
@@ -102,7 +103,36 @@ public class AppGui extends JFrame implements ActionListener {
         fuelPanel.setMaximumSize(new Dimension(700,30));
 
         firstPage.add(fuelPanel);
+        firstPage.add(Box.createRigidArea(new Dimension(0,50)));
+
+
+        // GearBox
+        gearBoxPanel = new JPanel();
+
+        gearBoxLabel = new JLabel("Wybierz skrzynię biegów: ");
+        gearBoxLabel.setPreferredSize(new Dimension(140,20));
+
+        cvtCheck = new JCheckBox("CVT", false);
+        automaticCheck = new JCheckBox("Automatic", false);
+        manulaCheck = new JCheckBox("Manual", false);
+
+        cvtCheck.setPreferredSize(new Dimension(50,20));
+        automaticCheck.setPreferredSize(new Dimension(85,20));
+        manulaCheck.setPreferredSize(new Dimension(85,20));
+
+        cvtCheck.addActionListener(this);
+        automaticCheck.addActionListener(this);
+        manulaCheck.addActionListener(this);
+
+        gearBoxPanel.add(gearBoxLabel);
+        gearBoxPanel.add(cvtCheck);
+        gearBoxPanel.add(automaticCheck);
+        gearBoxPanel.add(manulaCheck);
+        gearBoxPanel.setMaximumSize(new Dimension(700,30));
+
+        firstPage.add(gearBoxPanel);
         firstPage.add(Box.createVerticalGlue());
+
 
         // error
         errorlabel = new JLabel("");
@@ -189,9 +219,13 @@ public class AppGui extends JFrame implements ActionListener {
                 if (CarData.fuel.size() == 0){
                     throw new FuelException();
                 }
+                if (CarData.gearBox.size() == 0){
+                    throw new GearBoxException();
+                }
                 CarData.filterData();
                 mainLayout.next(this.getContentPane());
                 errorlabel.setText("");
+                System.out.println(CarData.gearBox);
             }
             catch (NumberFormatException p) {
 
@@ -203,6 +237,9 @@ public class AppGui extends JFrame implements ActionListener {
             }
             catch (FuelException p){
                 errorlabel.setText("Trzeba zaznaczyć jakiś typ paliwa");
+            }
+            catch (GearBoxException p){
+                errorlabel.setText("Trzeba zaznaczyć jakiś typ sktzyni biegów");
             }
 
 
@@ -260,6 +297,27 @@ public class AppGui extends JFrame implements ActionListener {
                 CarData.fuel.remove(electricCheck.getText());
             }
 
+        }
+        if (e.getSource().equals(cvtCheck)){
+            if (cvtCheck.isSelected()){
+                CarData.gearBox.add(cvtCheck.getText());
+            }else {
+                CarData.gearBox.remove(cvtCheck.getText());
+            }
+        }
+        if (e.getSource().equals(automaticCheck)){
+            if (automaticCheck.isSelected()){
+                CarData.gearBox.add(automaticCheck.getText());
+            }else {
+                CarData.gearBox.remove(automaticCheck.getText());
+            }
+        }
+        if (e.getSource().equals(manulaCheck)){
+            if (manulaCheck.isSelected()){
+                CarData.gearBox.add(manulaCheck.getText());
+            }else {
+                CarData.gearBox.remove(manulaCheck.getText());
+            }
         }
 
 
