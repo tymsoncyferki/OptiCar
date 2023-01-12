@@ -11,10 +11,10 @@ public class AppGui extends JFrame implements ActionListener {
     CardLayout listLayout = new CardLayout();
     JPanel firstPage, secondPage, thirdPage;
     // firstPage
-    JPanel dataPanel, buttonPanel1, practicalityPanel, fuelPanel, centerPanel;
+    JPanel dataPanel, buttonPanel1, practicalityPanel, fuelPanel, errorPanel;
     JTextField minPrice, maxPrice;
     JButton forwardButton;
-    JLabel price, practicalityLabel, fuelLabel;
+    JLabel price, practicalityLabel, fuelLabel, errorlabel;
     JComboBox<String> practicalityCombo;
     JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck;
     // secondPage
@@ -104,6 +104,16 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.add(fuelPanel);
         firstPage.add(Box.createVerticalGlue());
 
+        // error
+        errorlabel = new JLabel("");
+        errorlabel.setFont(new Font("Verdana", Font.BOLD, 15));
+        errorlabel.setForeground(Color.red);
+        errorPanel = new JPanel();
+        errorPanel.setMaximumSize(new Dimension(600,20));
+        errorPanel.add(errorlabel);
+
+        firstPage.add(errorPanel);
+
         // buttons
         forwardButton = new JButton("Next");
         forwardButton.setActionCommand("forward");
@@ -168,15 +178,34 @@ public class AppGui extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("forward")) {
-            CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
-            CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
-            CarData.practicality = (String) practicalityCombo.getSelectedItem();
+            try {
+                CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
+                CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
 
-            System.out.println(CarData.practicality);
-            System.out.println(CarData.fuel);
+                if (CarData.maxPrice < 1550){
+                    throw new MaxPriceException();
+                }
+                CarData.practicality = (String) practicalityCombo.getSelectedItem();
+                if (CarData.fuel.size() == 0){
+                    throw new FuelException();
+                }
+                CarData.filterData();
+                mainLayout.next(this.getContentPane());
+                errorlabel.setText("");
+            }
+            catch (NumberFormatException p) {
 
-            CarData.filterData();
-            mainLayout.next(this.getContentPane());
+                errorlabel.setText("Proszę podać prawidłową cenę");
+
+            }
+            catch (MaxPriceException p){
+                errorlabel.setText("Nie isteniją samochody w takiej cenie");
+            }
+            catch (FuelException p){
+                errorlabel.setText("Trzeba zaznaczyć jakiś typ paliwa");
+            }
+
+
         }
 
         if (e.getActionCommand().equals("back")) {
