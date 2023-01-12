@@ -9,6 +9,7 @@ public abstract class CarData{
     static double minPrice = 0;
     static double maxPrice = 10000000;
     static ArrayList<String> traits;
+    static String practicality;
     static Table mainTable;
     static Table filteredCars;
 
