@@ -21,7 +21,7 @@ colnames(df) <- c("Brand", "Price", "Photo", "Model", "Engine", "Power",
                   "Punkty_trasa" ,               "Punkty_rodzinny"            ,
                   "Punkty_uniwersalny",          "Punkty_spalanie_srednie" )
 
-colnames(df)
-View(df)
-
+df <- df %>%
+  mutate(Wynik = 0)
+View
 write.csv(df, "cars.csv", row.names=FALSE)
