@@ -113,7 +113,7 @@ public class Car implements ActionListener{
         JFrame carInfoDetailed  = new JFrame();
         carInfoDetailed.setMinimumSize(new Dimension(1000, 500));
         carInfoDetailed.setResizable(false);
-        carInfoDetailed.setLocation(0, 0);
+        carInfoDetailed.setLocation(0, 30);
 
         String dataBasic[][]={
                 {"Model", brand + " " + model},
@@ -129,19 +129,31 @@ public class Car implements ActionListener{
                 {"Torque", torque + " pound-foot"},
                 {"Fuel Type", fuelType}};
         String columnEngine[]={"Engine", ""};
-        JTable tableEngine = new JTable(dataEngine,columnEngine);
+        JTable tableEngine = new JTable(dataEngine,columnEngine) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            };
+        };
 
         String dataTransmission[][]={
                 {"Gear box", gearBox},
                 {"Drive type", driveType.substring(0, 1).toUpperCase() + driveType.substring(1)}};
         String columnTransmission[]={"Transmission", ""};
-        JTable tableTransmission = new JTable(dataTransmission,columnTransmission);
+        JTable tableTransmission = new JTable(dataTransmission,columnTransmission) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            };
+        };;
 
         String dataConsuption[][]={
                 {"Mileage in city", cityConsumption + " miles per galon"},
                 {"Mileage on highway", highwayConsumption + " miles per galon"}};
         String columnConsuption[]={"Mileage", ""};
-        JTable tableConsuption = new JTable(dataConsuption,columnConsuption);
+        JTable tableConsuption = new JTable(dataConsuption,columnConsuption) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            };
+        };;
 
         String dataPhysical [][]={
                 {"Number of doors", doors},
@@ -151,7 +163,11 @@ public class Car implements ActionListener{
                 {"Length", length + " inch"},
                 {"Width", width + " inch"}};
         String columnPhysical[]={"Physical parameters", ""};
-        JTable tablePhysical = new JTable(dataPhysical,columnPhysical);
+        JTable tablePhysical = new JTable(dataPhysical,columnPhysical) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            };
+        };;
 
 
         Container c = carInfoDetailed.getContentPane();
