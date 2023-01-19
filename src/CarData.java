@@ -27,13 +27,13 @@ public abstract class CarData{
 
         filteredCars = filteredCars.where(filteredCars.stringColumn("Gearbox").isIn(gearBox));
 
-        if (Objects.equals(practicality, "Miasto")){
+        if (Objects.equals(practicality, "City")){
             filteredCars.column("Punkty_miasto").setName("Practicality");
         }
-        else if (Objects.equals(practicality, "Trasa")){
+        else if (Objects.equals(practicality, "Route")){
             filteredCars.column("Punkty_trasa").setName("Practicality");
         }
-        else if (Objects.equals(practicality, "Rodzinny")){
+        else if (Objects.equals(practicality, "Family")){
             filteredCars.column("Punkty_rodzinny").setName("Practicality");
         }
         else{

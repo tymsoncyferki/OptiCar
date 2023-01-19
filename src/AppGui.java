@@ -56,13 +56,13 @@ public class AppGui extends JFrame implements ActionListener {
         // combo box
 
         practicalityCombo = new JComboBox<>();
-        practicalityCombo.addItem("Miasto");
-        practicalityCombo.addItem("Trasa");
-        practicalityCombo.addItem("Rodzinny");
-        practicalityCombo.addItem("Uniwersalny");
+        practicalityCombo.addItem("City");
+        practicalityCombo.addItem("Route");
+        practicalityCombo.addItem("Family");
+        practicalityCombo.addItem("Universal");
         practicalityCombo.setPreferredSize(new Dimension(160,50));
         practicalityCombo.addActionListener(this);
-        practicalityLabel = new JLabel("Wybierz przeznaczenie: ");
+        practicalityLabel = new JLabel("Destiny: ");
         practicalityPanel = new JPanel();
         practicalityPanel.add(practicalityLabel);
         practicalityPanel.add(practicalityCombo);
@@ -73,8 +73,8 @@ public class AppGui extends JFrame implements ActionListener {
 
         // fuel panel
         fuelPanel = new JPanel();
-        fuelLabel = new JLabel("Wybierz rodzaj paliwa: ");
-        fuelLabel.setPreferredSize(new Dimension(135,20));
+        fuelLabel = new JLabel("Fuel type: ");
+        fuelLabel.setPreferredSize(new Dimension(60,20));
         fuelPanel.add(fuelLabel);
 
         petrolCheck = new JCheckBox("Petrol",false);
@@ -106,8 +106,8 @@ public class AppGui extends JFrame implements ActionListener {
         // GearBox
         gearBoxPanel = new JPanel();
 
-        gearBoxLabel = new JLabel("Wybierz skrzynię biegów: ");
-        gearBoxLabel.setPreferredSize(new Dimension(140,20));
+        gearBoxLabel = new JLabel("Gearbox: ");
+        gearBoxLabel.setPreferredSize(new Dimension(60,20));
 
         cvtCheck = new JCheckBox("CVT", false);
         automaticCheck = new JCheckBox("Automatic", false);
@@ -228,20 +228,20 @@ public class AppGui extends JFrame implements ActionListener {
             }
             catch (NumberFormatException p) {
 
-                errorlabel.setText("Proszę podać prawidłową cenę");
+                errorlabel.setText("Please enter a correct price!");
 
             }
             catch (MaxPriceException p){
-                errorlabel.setText("Nie isteniją samochody w takiej cenie");
+                errorlabel.setText("There are no cars at such a price!");
             }
             catch (FuelException p){
-                errorlabel.setText("Trzeba zaznaczyć jakiś typ paliwa");
+                errorlabel.setText("You have to select some type of fuel!");
             }
             catch (GearBoxException p){
-                errorlabel.setText("Trzeba zaznaczyć jakiś typ sktzyni biegów");
+                errorlabel.setText("You have to select some type of gearbox!");
             }
             catch (EmptyDataException p){
-                errorlabel.setText("Nie isteniją takie samochody");
+                errorlabel.setText("There are no such cars!");
             }
 
 

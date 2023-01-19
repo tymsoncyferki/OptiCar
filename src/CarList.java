@@ -31,8 +31,7 @@ public class CarList extends JPanel implements ActionListener {
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
         boolean maxCars = false;
         for (int j = listCount * 20; j < listCount * 20 + 20; j++) {
-            //todo
-            // jak j jest większe niż liczba wierszy to już nic nie wyświetlać i usunąć przycisk next
+
             try {
 
                 Car car = new Car(Cars.rows(j));
