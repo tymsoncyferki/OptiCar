@@ -55,6 +55,7 @@ public class Car {
         JLabel carPhoto = new JLabel(icon);
         photoPanel.add(carPhoto);
         mainPanel.add(photoPanel, BorderLayout.WEST);
+        mainPanel.setMaximumSize(new Dimension(3000,165));
 
         return mainPanel;
     }

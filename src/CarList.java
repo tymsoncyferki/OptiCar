@@ -1,3 +1,4 @@
+import afu.org.checkerframework.checker.oigj.qual.I;
 import tech.tablesaw.api.Table;
 
 import javax.swing.*;
@@ -5,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.ArrayList;
 
 public class CarList extends JPanel implements ActionListener {
@@ -26,16 +28,23 @@ public class CarList extends JPanel implements ActionListener {
         listPanel.setPreferredSize(new Dimension(400, 3000));
         GridLayout gridLayout = new GridLayout(0,1);
         gridLayout.setVgap(3);
-        listPanel.setLayout(gridLayout);
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
+        boolean maxCars = false;
         for (int j = listCount * 20; j < listCount * 20 + 20; j++) {
             //todo
             // jak j jest większe niż liczba wierszy to już nic nie wyświetlać i usunąć przycisk next
-            Car car = new Car(Cars.rows(j));
             try {
+
+                Car car = new Car(Cars.rows(j));
                 listPanel.add(car.carInfo());
-            } catch (IOException e) {
+                maxCars = false;
+            } catch (IndexOutOfBoundsException e){
+                maxCars = true;
+                break;
+            } catch (IOException e){
                 e.printStackTrace();
             }
+
         }
         JScrollPane scrollPane = new JScrollPane(listPanel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
@@ -67,6 +76,9 @@ public class CarList extends JPanel implements ActionListener {
         backButton.addActionListener(this);
         buttonPanel.add(backButton);
         forwardButton = new JButton("Next");
+        if (maxCars){
+            forwardButton.setEnabled(false);
+        }
         forwardButton.setActionCommand("next");
         forwardButton.setPreferredSize(new Dimension(90, 30));
         forwardButton.addActionListener(this);

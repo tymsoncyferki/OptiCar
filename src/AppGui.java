@@ -36,9 +36,6 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.setLayout(new BoxLayout(firstPage, BoxLayout.PAGE_AXIS));
 
         // collecting data
-        //todo
-        // przypadek gdy początkowa cena jest zbyt wysoka
-        //
         dataPanel = new JPanel();
         minPrice = new JTextField("0");
         minPrice.setPreferredSize(new Dimension(90, 30));
@@ -223,6 +220,9 @@ public class AppGui extends JFrame implements ActionListener {
                     throw new GearBoxException();
                 }
                 CarData.filterData();
+                if (CarData.filteredCars.isEmpty()){
+                    throw new EmptyDataException();
+                }
                 mainLayout.next(this.getContentPane());
                 errorlabel.setText("");
             }
@@ -239,6 +239,9 @@ public class AppGui extends JFrame implements ActionListener {
             }
             catch (GearBoxException p){
                 errorlabel.setText("Trzeba zaznaczyć jakiś typ sktzyni biegów");
+            }
+            catch (EmptyDataException p){
+                errorlabel.setText("Nie isteniją takie samochody");
             }
 
 
