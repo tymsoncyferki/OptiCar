@@ -26,7 +26,12 @@ public class Car implements ActionListener{
     String driveType;
     String cityConsumption;
     String highwayConsumption;
-
+    String height;
+    String weight;
+    String length;
+    String width;
+    String doors;
+    String seats;
 
     public Car(Table carRow) {
         mainPanel = new JPanel();
@@ -44,6 +49,12 @@ public class Car implements ActionListener{
         driveType = carRow.get(0,"Drivetrain");
         cityConsumption = carRow.get(0,"Consumption_city");
         highwayConsumption = carRow.get(0,"Consumption_highway");
+        height = carRow.get(0,"Height");
+        weight = carRow.get(0,"Weight_lbs");
+        length = carRow.get(0,"Length");
+        width = carRow.get(0,"Width");
+        doors = carRow.get(0,"Doors");
+        seats = carRow.get(0,"Seats");
     }
 
     public JPanel carInfo() throws IOException {
@@ -100,12 +111,13 @@ public class Car implements ActionListener{
     public JFrame CarInfoDetailed() throws IOException{
 
         JFrame carInfoDetailed  = new JFrame();
-        carInfoDetailed.setMinimumSize(new Dimension(1000, 600));
+        carInfoDetailed.setMinimumSize(new Dimension(1000, 500));
+        carInfoDetailed.setResizable(false);
         carInfoDetailed.setLocation(0, 0);
 
         String dataBasic[][]={
                 {"Model", brand + " " + model},
-                {"Price", price + "$"},
+                {"Price", price + " $"},
                 {"Body Type", body}};
         String columnBasic[]={"Basic info", ""};
         JTable tableBasic = new JTable(dataBasic,columnBasic);
@@ -121,8 +133,8 @@ public class Car implements ActionListener{
 
         String dataTransmission[][]={
                 {"Gear box", gearBox},
-                {"Drive type", driveType}};
-        String columnTransmission[]={"Engine", ""};
+                {"Drive type", driveType.substring(0, 1).toUpperCase() + driveType.substring(1)}};
+        String columnTransmission[]={"Transmission", ""};
         JTable tableTransmission = new JTable(dataTransmission,columnTransmission);
 
         String dataConsuption[][]={
@@ -130,6 +142,16 @@ public class Car implements ActionListener{
                 {"Mileage on highway", highwayConsumption + " miles per galon"}};
         String columnConsuption[]={"Mileage", ""};
         JTable tableConsuption = new JTable(dataConsuption,columnConsuption);
+
+        String dataPhysical [][]={
+                {"Number of doors", doors},
+                {"Number of seats", seats},
+                {"Weight", weight + " pounds"},
+                {"Height", height + " inch"},
+                {"Length", length + " inch"},
+                {"Width", width + " inch"}};
+        String columnPhysical[]={"Physical parameters", ""};
+        JTable tablePhysical = new JTable(dataPhysical,columnPhysical);
 
 
         Container c = carInfoDetailed.getContentPane();
@@ -142,6 +164,8 @@ public class Car implements ActionListener{
         c.add(tableTransmission);
         c.add(tableConsuption.getTableHeader());
         c.add(tableConsuption);
+        c.add(tablePhysical.getTableHeader());
+        c.add(tablePhysical);
 
 
 
