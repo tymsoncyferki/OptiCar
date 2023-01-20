@@ -91,7 +91,7 @@ public class DragAndDropList extends JPanel {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JToggleButton button = new JToggleButton(value.toString(), isSelected);
-            button.setFont(new Font("Segoe UI",  Font.PLAIN, 20));
+            button.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 20));
             button.setSize(new Dimension(100, 30));
             return button;
         }

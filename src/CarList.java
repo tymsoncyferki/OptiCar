@@ -23,19 +23,23 @@ public class CarList extends JPanel implements ActionListener {
     public CarList() {
 
         setLayout(new BorderLayout());
-
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         listPanel = new JPanel();
-        listPanel.setPreferredSize(new Dimension(400, 3000));
-        GridLayout gridLayout = new GridLayout(0,1);
-        gridLayout.setVgap(3);
-        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
+        listPanel.setPreferredSize(new Dimension(400, 3200));
+//        GridLayout gridLayout = new GridLayout(0,1);
+//        gridLayout.setVgap(10);
+//        gridLayout.setHgap(10);
+        BoxLayout boxLayout = new BoxLayout(listPanel, BoxLayout.PAGE_AXIS);
+        listPanel.setLayout(boxLayout);
         boolean maxCars = false;
+        listPanel.add(Box.createRigidArea(new Dimension(5, 5)));
         for (int j = listCount * 20; j < listCount * 20 + 20; j++) {
 
             try {
 
                 Car car = new Car(Cars.rows(j));
                 listPanel.add(car.carInfo());
+                listPanel.add(Box.createRigidArea(new Dimension(5, 5)));
                 maxCars = false;
             } catch (IndexOutOfBoundsException e){
                 maxCars = true;
@@ -47,9 +51,11 @@ public class CarList extends JPanel implements ActionListener {
         }
         JScrollPane scrollPane = new JScrollPane(listPanel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.LIGHT_GRAY));
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setLayout(new OverlayLayout(layeredPane));
         layeredPane.add(scrollPane, new Integer(0));
+        //layeredPane.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 
         // loading
         loadingPanel = new JPanel();
@@ -59,11 +65,13 @@ public class CarList extends JPanel implements ActionListener {
         loadingPanel.setVisible(false);
         layeredPane.add(loadingPanel, new Integer(1));
 
+        add(Box.createRigidArea(new Dimension(8, 5)), BorderLayout.WEST);
         add(layeredPane);
 
 
         // buttons
         buttonPanel = new JPanel();
+        buttonPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY));
         menuButton = new JButton("Menu");
         menuButton.setActionCommand("menu");
         menuButton.setPreferredSize(new Dimension(90, 30));

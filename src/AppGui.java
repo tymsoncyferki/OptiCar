@@ -37,7 +37,7 @@ public class AppGui extends JFrame implements ActionListener {
         setLayout(mainLayout);
         ImageIcon icon = new ImageIcon("res/car-icon.png");
         setIconImage(icon.getImage());
-        setFont(new Font("Segoe UI",  Font.PLAIN, 12));
+        setFont(new Font("Segoe UI",  Font.PLAIN, 18));
 
         // menu
         menuBar = new JMenuBar();
@@ -60,6 +60,7 @@ public class AppGui extends JFrame implements ActionListener {
 
         // collecting data
         dataPanel = new JPanel();
+        //dataPanel.setBorder(BorderFactory.createTitledBorder("Price"));
         minPrice = new JTextField("0");
         minPrice.setPreferredSize(new Dimension(90, 30));
         maxPrice = new JTextField("0");
@@ -68,7 +69,9 @@ public class AppGui extends JFrame implements ActionListener {
         dataPanel.add(price);
         dataPanel.add(minPrice);
         dataPanel.add(maxPrice);
-        dataPanel.setMaximumSize(new Dimension(300,30));
+        dataPanel.setPreferredSize(new Dimension(100,60));
+        dataPanel.setMaximumSize(new Dimension(400,100));
+        firstPage.add(Box.createRigidArea(new Dimension(0,50)));
         firstPage.add(dataPanel);
         firstPage.add(Box.createRigidArea(new Dimension(0,50)));
 
@@ -105,10 +108,10 @@ public class AppGui extends JFrame implements ActionListener {
         electricCheck = new JCheckBox("Electric",false);
         dieselCheck = new JCheckBox("Diesel",false);
 
-        petrolCheck.setPreferredSize(new Dimension(60,20));
-        hybridCheck.setPreferredSize(new Dimension(85,20));
-        electricCheck.setPreferredSize(new Dimension(85,20));
-        dieselCheck.setPreferredSize(new Dimension(100,20));
+        petrolCheck.setPreferredSize(new Dimension(70,40));
+        hybridCheck.setPreferredSize(new Dimension(70,40));
+        electricCheck.setPreferredSize(new Dimension(70,40));
+        dieselCheck.setPreferredSize(new Dimension(70,40));
 
         petrolCheck.addActionListener(this);
         hybridCheck.addActionListener(this);
@@ -187,7 +190,7 @@ public class AppGui extends JFrame implements ActionListener {
         // info
         infoPanel = new JPanel();
         listInfo = new JLabel("Choose traits and sort them by importance:");
-        listInfo.setFont(new Font("Segoe UI",  Font.PLAIN, 18));
+        listInfo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
         infoPanel.add(listInfo);
         secondPage.add(infoPanel, BorderLayout.NORTH);
         // drag and drop
@@ -384,7 +387,12 @@ public class AppGui extends JFrame implements ActionListener {
         FlatLightLaf.setup();
         AppGui app = new AppGui();
         app.showGui();
+        String fonts[] =
+                GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
+        for (int i = 0; i < fonts.length; i++) {
+            System.out.println(fonts[i]);
+        }
 
     }
 }
