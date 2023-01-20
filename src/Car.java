@@ -3,13 +3,20 @@ import tech.tablesaw.api.Table;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map;
 
 public class Car implements ActionListener{
     JPanel mainPanel;
@@ -61,17 +68,48 @@ public class Car implements ActionListener{
     public JPanel carInfo() throws IOException {
         //todo
         // zmienić, żeby się ładnie wyświetlało
-
+        Color myColor = Color.decode("#55acee");
         mainPanel.setPreferredSize(new Dimension(400, 150));
         mainPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
         mainPanel.setLayout(new BorderLayout());
+        mainPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                try {
+                    carInfoDetailed = CarInfoDetailed();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                carInfoDetailed.setVisible(true);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                mainPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, myColor));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                mainPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+            }
+        });
+        mainPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         JPanel infoPanel = new JPanel();
-        JLabel carName = new JLabel("Model: " + brand+ " " + model);
-        infoPanel.add(carName);
-        JLabel carPrice = new JLabel("Price: " + price + "$");
-        carPrice.setPreferredSize(new Dimension(200, 20));
-        infoPanel.add(carPrice);
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.PAGE_AXIS));
+        infoPanel.setPreferredSize(new Dimension(400, 150));
+        JLabel carName = new JLabel(brand + " " + model);
+        carName.setFont(new Font("Segoe UI Semibold",  Font.PLAIN, 20));
+        infoPanel.add(carName, Component.LEFT_ALIGNMENT);
+        JLabel carInfo = new JLabel(engineType + " | " + fuelType);
+        infoPanel.add(carInfo, Component.LEFT_ALIGNMENT);
+        JLabel carPrice = new JLabel(price + "$");
+        carPrice.setForeground(myColor);
+        carPrice.setFont(new Font("Segoe UI Semibold",  Font.PLAIN, 20));
+        infoPanel.add(carPrice, Component.LEFT_ALIGNMENT);
 
 
         JPanel photoPanel = new JPanel();
@@ -91,12 +129,48 @@ public class Car implements ActionListener{
         mainPanel.add(photoPanel, BorderLayout.WEST);
         mainPanel.setMaximumSize(new Dimension(3000,165));
 
+        JLabel searchWeb = new JLabel("Search web");
+        searchWeb.setBorder(new EmptyBorder(10, 10, 10, 10));
+        Font searchFont = searchWeb.getFont();
+        searchWeb.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        searchWeb.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String string = "https://www.google.com/search?q=" + brand + " " + model;
+                String uri = string.replaceAll(" ", "+").toLowerCase();
+                openWebpage(URI.create(uri));
 
-        JButton moreButton = new JButton("More info");
-        moreButton.setActionCommand("more");
-        moreButton.addActionListener(this);
-        infoPanel.add(moreButton);
-        mainPanel.add(infoPanel, BorderLayout.EAST);
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+
+                Map attributes = searchFont.getAttributes();
+                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                searchWeb.setFont(searchFont.deriveFont(attributes));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                searchWeb.setFont(searchFont);
+            }
+        });
+
+//        JButton moreButton = new JButton("Search web");
+//        moreButton.setActionCommand("more");
+//        moreButton.addActionListener(this);
+//        moreButton.setMargin(new Insets(0, 0, 0, 0));
+//        moreButton.setContentAreaFilled(false);
+//        moreButton.setOpaque(false);
+//        moreButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//        moreButton.setBorder(new EmptyBorder(10, 10, 10, 10));
+        JPanel morePanel = new JPanel();
+        morePanel.setLayout(new BoxLayout(morePanel, BoxLayout.PAGE_AXIS));
+        morePanel.add(Box.createRigidArea(new Dimension(5,0)), Component.RIGHT_ALIGNMENT);
+        morePanel.add(searchWeb, Component.RIGHT_ALIGNMENT);
+        mainPanel.add(morePanel, BorderLayout.EAST);
+        mainPanel.add(infoPanel, BorderLayout.CENTER);
 
 
         return mainPanel;
@@ -227,6 +301,28 @@ public class Car implements ActionListener{
         g2.dispose();
 
         return output;
+    }
+
+    public static boolean openWebpage(URI uri) {
+        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+            try {
+                desktop.browse(uri);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean openWebpage(URL url) {
+        try {
+            return openWebpage(url.toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
