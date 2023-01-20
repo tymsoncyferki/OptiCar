@@ -208,6 +208,8 @@ public class Car implements ActionListener{
                 return false;
             }
         };
+        tableBasic.getTableHeader().setReorderingAllowed(false);
+        tableBasic.getTableHeader().setResizingAllowed(false);
 
         if (torque.length() > 0) {
             torque = String.valueOf((int) (Double.parseDouble(torque) * 1.356));
@@ -227,6 +229,8 @@ public class Car implements ActionListener{
                 return false;
             }
         };
+        tableEngine.getTableHeader().setReorderingAllowed(false);
+        tableEngine.getTableHeader().setResizingAllowed(false);
 
         String dataTransmission[][]={
                 {"Gear box", gearBox},
@@ -237,6 +241,8 @@ public class Car implements ActionListener{
                 return false;
             }
         };
+        tableTransmission.getTableHeader().setReorderingAllowed(false);
+        tableTransmission.getTableHeader().setResizingAllowed(false);
 
         String dataConsuption[][]={
                 {"Mileage in city", cityConsumption + " miles per gallon"},
@@ -247,6 +253,8 @@ public class Car implements ActionListener{
                 return false;
             }
         };
+        tableConsuption.getTableHeader().setReorderingAllowed(false);
+        tableConsuption.getTableHeader().setResizingAllowed(false);
 
         if (doors.length() > 0) {
             doors = String.valueOf((int) Double.parseDouble(doors));
@@ -259,15 +267,17 @@ public class Car implements ActionListener{
                 {"Number of doors", doors},
                 {"Number of seats", seats},
                 {"Weight", weight + " pounds"},
-                {"Height", height + " inch"},
-                {"Length", length + " inch"},
-                {"Width", width + " inch"}};
+                {"Height", height + " inches"},
+                {"Length", length + " inches"},
+                {"Width", width + " inches"}};
         String columnPhysical[]={"Physical parameters", ""};
         JTable tablePhysical = new JTable(dataPhysical,columnPhysical) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+        tablePhysical.getTableHeader().setReorderingAllowed(false);
+        tablePhysical.getTableHeader().setResizingAllowed(false);
 
 
         Container c = carInfoDetailed.getContentPane();
