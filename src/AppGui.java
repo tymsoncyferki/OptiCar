@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class AppGui extends JFrame implements ActionListener {
@@ -28,7 +30,7 @@ public class AppGui extends JFrame implements ActionListener {
     // menu
     JMenuBar menuBar;
     JMenu aboutMenu, helpMenu;
-    JMenuItem aboutApp, aboutProject;
+    JMenuItem aboutApp, aboutProject, filterHelp, traitsHelp;
 
     public AppGui() {
         super("Findcar");
@@ -45,13 +47,57 @@ public class AppGui extends JFrame implements ActionListener {
         menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         aboutMenu = new JMenu("About");
         menuBar.add(aboutMenu);
-        aboutApp = new JMenuItem("App info");
+        aboutApp = new JMenuItem("App");
+        aboutApp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                JDialog dialog = Information.appInfo(AppGui.this);
+                dialog.setVisible(true);
+                dialog.setLocationRelativeTo(AppGui.this);
+            }
+        });
         aboutMenu.add(aboutApp);
         aboutMenu.addSeparator();
-        aboutProject = new JMenuItem("Project info");
+        aboutProject = new JMenuItem("Project");
+        aboutProject.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                JDialog dialog = Information.projectInfo(AppGui.this);
+                dialog.setVisible(true);
+                dialog.setLocationRelativeTo(AppGui.this);
+            }
+        });
         aboutMenu.add(aboutProject);
+
         helpMenu = new JMenu("Help");
         menuBar.add(helpMenu);
+        filterHelp = new JMenuItem("Filtering");
+        filterHelp.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                JDialog dialog = Information.filterHelp(AppGui.this);
+                dialog.setVisible(true);
+                dialog.setLocationRelativeTo(AppGui.this);
+
+            }
+        });
+        helpMenu.add(filterHelp);
+        helpMenu.addSeparator();
+        traitsHelp = new JMenuItem("Traits");
+        traitsHelp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                JDialog dialog = Information.traitHelp(AppGui.this);
+                dialog.setVisible(true);
+                dialog.setLocationRelativeTo(AppGui.this);
+            }
+        });
+        helpMenu.add(traitsHelp);
         setJMenuBar(menuBar);
 
         // panel 1
@@ -60,7 +106,7 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.setLayout(new BoxLayout(firstPage, BoxLayout.PAGE_AXIS));
 
         JPanel startPanel = new JPanel();
-        JLabel startInfo = new JLabel("Find the perfect car for you!");
+        JLabel startInfo = new JLabel("Find the perfect car for yourself!");
         startInfo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
         startInfo.setBorder(new EmptyBorder(20, 10, 30, 10));
         startPanel.add(startInfo);
@@ -180,7 +226,7 @@ public class AppGui extends JFrame implements ActionListener {
         forwardButton.addActionListener(this);
         buttonPanel1 = new JPanel();
         buttonPanel1.add(forwardButton);
-        buttonPanel1.setMaximumSize(new Dimension(90,30));
+        buttonPanel1.setMaximumSize(new Dimension(3000,30));
 
         firstPage.add(buttonPanel1);
 
@@ -216,6 +262,7 @@ public class AppGui extends JFrame implements ActionListener {
         searchButton.setPreferredSize(new Dimension(90, 30));
         searchButton.addActionListener(this);
         buttonPanel2.add(searchButton);
+        //buttonPanel2.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY));
         secondPage.add(buttonPanel2, BorderLayout.SOUTH);
 
         layeredPane = new JLayeredPane();
@@ -323,6 +370,7 @@ public class AppGui extends JFrame implements ActionListener {
                     thirdPage.removeAll();
                     CarData.traits = new ArrayList<>(DragAndDropList.dndList.getSelectedValuesList());
                     CarData.findCars();
+                    Car.frame = AppGui.this;
                     CarList.frame = AppGui.this;
                     CarList carsList = new CarList();
                     thirdPage.add(carsList);

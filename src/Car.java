@@ -1,6 +1,5 @@
 import org.imgscalr.Scalr;
 import tech.tablesaw.api.Table;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,11 +13,11 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
 public class Car implements ActionListener{
+    static JFrame frame;
     JPanel mainPanel;
     JFrame carInfoDetailed;
     String photo;
@@ -81,6 +80,7 @@ public class Car implements ActionListener{
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+                carInfoDetailed.setLocationRelativeTo(frame);
                 carInfoDetailed.setVisible(true);
             }
 
@@ -158,14 +158,6 @@ public class Car implements ActionListener{
             }
         });
 
-//        JButton moreButton = new JButton("Search web");
-//        moreButton.setActionCommand("more");
-//        moreButton.addActionListener(this);
-//        moreButton.setMargin(new Insets(0, 0, 0, 0));
-//        moreButton.setContentAreaFilled(false);
-//        moreButton.setOpaque(false);
-//        moreButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//        moreButton.setBorder(new EmptyBorder(10, 10, 10, 10));
         JPanel morePanel = new JPanel();
         morePanel.setLayout(new BoxLayout(morePanel, BoxLayout.PAGE_AXIS));
         morePanel.add(Box.createRigidArea(new Dimension(5,0)), Component.RIGHT_ALIGNMENT);
@@ -178,23 +170,11 @@ public class Car implements ActionListener{
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("more")) {
-            try {
-                carInfoDetailed = CarInfoDetailed();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            carInfoDetailed.setVisible(true);
-        }
-    }
-
 
     public JFrame CarInfoDetailed() throws IOException{
 
         JFrame carInfoDetailed  = new JFrame("Technical specifications");
-        carInfoDetailed.setMinimumSize(new Dimension(1000, 500));
+        carInfoDetailed.setMinimumSize(new Dimension(960, 500));
         carInfoDetailed.setResizable(false);
         carInfoDetailed.setLocation(0, 30);
 
@@ -328,4 +308,8 @@ public class Car implements ActionListener{
         return false;
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
 }

@@ -21,7 +21,7 @@ public class CarList extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         listPanel = new JPanel();
-        listPanel.setPreferredSize(new Dimension(400, 3200));
+        listPanel.setMaximumSize(new Dimension(1000, 3200));
         BoxLayout boxLayout = new BoxLayout(listPanel, BoxLayout.PAGE_AXIS);
         listPanel.setLayout(boxLayout);
         boolean maxCars = false;
@@ -48,7 +48,6 @@ public class CarList extends JPanel implements ActionListener {
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setLayout(new OverlayLayout(layeredPane));
         layeredPane.add(scrollPane, new Integer(0));
-        //layeredPane.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 
         // loading
         loadingPanel = new JPanel();
@@ -98,7 +97,6 @@ public class CarList extends JPanel implements ActionListener {
                 frame.listLayout.previous(frame.thirdPage);
                 listNumber -= 1;
             }
-            //System.out.println("count: " + listCount + ", number: " + listNumber);
         }
         if (e.getActionCommand().equals("next")) {
             if (listNumber < listCount) {

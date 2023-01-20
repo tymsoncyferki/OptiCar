@@ -17,6 +17,7 @@ public class DragAndDropList extends JPanel {
             traitsList.addElement(trait);
         }
         dndList = new JList<>(traitsList);
+        dndList.setOpaque(false);
         dndList.setCellRenderer(new buttonCellRenderer());
         DnDAdapter mouseAdapter = new DnDAdapter();
         dndList.addMouseListener(mouseAdapter);
