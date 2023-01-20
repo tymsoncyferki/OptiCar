@@ -387,12 +387,12 @@ public class AppGui extends JFrame implements ActionListener {
         FlatLightLaf.setup();
         AppGui app = new AppGui();
         app.showGui();
-        String fonts[] =
-                GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
-        for (int i = 0; i < fonts.length; i++) {
-            System.out.println(fonts[i]);
-        }
+//        String fonts[] =
+//                GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+//        for (int i = 0; i < fonts.length; i++) {
+//            System.out.println(fonts[i]);
+//        }
 
     }
 }

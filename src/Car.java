@@ -28,8 +28,8 @@ public class Car implements ActionListener{
     int price;
     String engineType;
     String fuelType;
-    int torque;
-    int power;
+    String torque;
+    String power;
     String gearBox;
     String driveType;
     String cityConsumption;
@@ -38,8 +38,8 @@ public class Car implements ActionListener{
     String weight;
     String length;
     String width;
-    int doors;
-    int seats;
+    String doors;
+    String seats;
 
     public Car(Table carRow) {
         mainPanel = new JPanel();
@@ -47,12 +47,12 @@ public class Car implements ActionListener{
         photo = carRow.get(0, "Photo");
         brand = carRow.get(0, "Brand");
         model = carRow.get(0, "Model");
-        body =carRow.get(0, "Body");
+        body = carRow.get(0, "Body");
         price = (int) Double.parseDouble(carRow.get(0, "Pricing"));
         engineType = carRow.get(0,"Engine");
         fuelType = carRow.get(0,"Fuel");
-        torque = (int) Double.parseDouble(carRow.get(0,"Torque_lb_ft"));
-        power = (int) Double.parseDouble(carRow.get(0,"Power"));
+        torque = carRow.get(0,"Torque_lb_ft");
+        power = carRow.get(0,"Power");
         gearBox = carRow.get(0,"GearBox");
         driveType = carRow.get(0,"Drivetrain");
         cityConsumption = carRow.get(0,"Consumption_city");
@@ -61,8 +61,8 @@ public class Car implements ActionListener{
         weight = carRow.get(0,"Weight_lbs");
         length = carRow.get(0,"Length");
         width = carRow.get(0,"Width");
-        doors = (int) Double.parseDouble(carRow.get(0,"Doors"));
-        seats = (int) Double.parseDouble(carRow.get(0,"Seats"));
+        doors = carRow.get(0,"Doors");
+        seats = carRow.get(0,"Seats");
     }
 
     public JPanel carInfo() throws IOException {
@@ -106,6 +106,7 @@ public class Car implements ActionListener{
         infoPanel.add(carName, Component.LEFT_ALIGNMENT);
         JLabel carInfo = new JLabel(engineType + " | " + fuelType);
         infoPanel.add(carInfo, Component.LEFT_ALIGNMENT);
+        //String sPrice = insertSpaces(String.valueOf(price));
         JLabel carPrice = new JLabel(price + "$");
         carPrice.setForeground(myColor);
         carPrice.setFont(new Font("Segoe UI Semibold",  Font.PLAIN, 20));
@@ -205,20 +206,26 @@ public class Car implements ActionListener{
         JTable tableBasic = new JTable(dataBasic,columnBasic)  {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
-        };;
+            }
+        };
 
+        if (torque.length() > 0) {
+            torque = String.valueOf((int) (Double.parseDouble(torque) * 1.356));
+        }
+        if (power.length() > 0) {
+            power = String.valueOf((int) Double.parseDouble(power));
+        }
 
         String dataEngine[][]={
                 {"Engine type", engineType},
                 {"Engine Power", power + " HP"},
-                {"Torque", (int) (torque * 1.356) + " Nm"},
+                {"Torque", torque + " Nm"},
                 {"Fuel Type", fuelType}};
         String columnEngine[]={"Engine", ""};
         JTable tableEngine = new JTable(dataEngine,columnEngine) {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
+            }
         };
 
         String dataTransmission[][]={
@@ -228,8 +235,8 @@ public class Car implements ActionListener{
         JTable tableTransmission = new JTable(dataTransmission,columnTransmission) {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
-        };;
+            }
+        };
 
         String dataConsuption[][]={
                 {"Mileage in city", cityConsumption + " miles per gallon"},
@@ -238,12 +245,19 @@ public class Car implements ActionListener{
         JTable tableConsuption = new JTable(dataConsuption,columnConsuption) {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
-        };;
+            }
+        };
+
+        if (doors.length() > 0) {
+            doors = String.valueOf((int) Double.parseDouble(doors));
+        }
+        if (seats.length() > 0) {
+            seats = String.valueOf((int) Double.parseDouble(seats));
+        }
 
         String dataPhysical [][]={
-                {"Number of doors", String.valueOf(doors)},
-                {"Number of seats", String.valueOf(seats)},
+                {"Number of doors", doors},
+                {"Number of seats", seats},
                 {"Weight", weight + " pounds"},
                 {"Height", height + " inch"},
                 {"Length", length + " inch"},
@@ -252,8 +266,8 @@ public class Car implements ActionListener{
         JTable tablePhysical = new JTable(dataPhysical,columnPhysical) {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
-        };;
+            }
+        };
 
 
         Container c = carInfoDetailed.getContentPane();
@@ -323,6 +337,19 @@ public class Car implements ActionListener{
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static String insertSpaces(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = s.length() - 1; i >= 0; i -= 3) {
+            if (i >= 2) {
+                sb.append(s.substring(i-2, i+1));
+                sb.append(" ");
+            } else {
+                sb.append(s.substring(0, i + 1));
+            }
+        }
+        return sb.reverse().toString();
     }
 
 }
