@@ -198,11 +198,11 @@ public class Car implements ActionListener{
         carInfoDetailed.setResizable(false);
         carInfoDetailed.setLocation(0, 30);
 
-        String dataBasic[][]={
+        String[][] dataBasic ={
                 {"Model", brand + " " + model},
                 {"Price", price + " $"},
                 {"Body Type", body}};
-        String columnBasic[]={"Basic info", ""};
+        String[] columnBasic ={"Basic info", ""};
         JTable tableBasic = new JTable(dataBasic,columnBasic)  {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -218,12 +218,12 @@ public class Car implements ActionListener{
             power = String.valueOf((int) Double.parseDouble(power));
         }
 
-        String dataEngine[][]={
+        String[][] dataEngine ={
                 {"Engine type", engineType},
                 {"Engine Power", power + " HP"},
                 {"Torque", torque + " Nm"},
                 {"Fuel Type", fuelType}};
-        String columnEngine[]={"Engine", ""};
+        String[] columnEngine ={"Engine", ""};
         JTable tableEngine = new JTable(dataEngine,columnEngine) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -232,10 +232,10 @@ public class Car implements ActionListener{
         tableEngine.getTableHeader().setReorderingAllowed(false);
         tableEngine.getTableHeader().setResizingAllowed(false);
 
-        String dataTransmission[][]={
+        String[][] dataTransmission ={
                 {"Gear box", gearBox},
                 {"Drive type", driveType.substring(0, 1).toUpperCase() + driveType.substring(1)}};
-        String columnTransmission[]={"Transmission", ""};
+        String[] columnTransmission ={"Transmission", ""};
         JTable tableTransmission = new JTable(dataTransmission,columnTransmission) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -244,10 +244,10 @@ public class Car implements ActionListener{
         tableTransmission.getTableHeader().setReorderingAllowed(false);
         tableTransmission.getTableHeader().setResizingAllowed(false);
 
-        String dataConsuption[][]={
+        String[][] dataConsuption ={
                 {"Mileage in city", cityConsumption + " miles per gallon"},
                 {"Mileage on highway", highwayConsumption + " miles per gallon"}};
-        String columnConsuption[]={"Mileage", ""};
+        String[] columnConsuption ={"Mileage", ""};
         JTable tableConsuption = new JTable(dataConsuption,columnConsuption) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -263,14 +263,14 @@ public class Car implements ActionListener{
             seats = String.valueOf((int) Double.parseDouble(seats));
         }
 
-        String dataPhysical [][]={
+        String[][] dataPhysical ={
                 {"Number of doors", doors},
                 {"Number of seats", seats},
                 {"Weight", weight + " pounds"},
                 {"Height", height + " inches"},
                 {"Length", length + " inches"},
                 {"Width", width + " inches"}};
-        String columnPhysical[]={"Physical parameters", ""};
+        String[] columnPhysical ={"Physical parameters", ""};
         JTable tablePhysical = new JTable(dataPhysical,columnPhysical) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -278,7 +278,6 @@ public class Car implements ActionListener{
         };
         tablePhysical.getTableHeader().setReorderingAllowed(false);
         tablePhysical.getTableHeader().setResizingAllowed(false);
-
 
         Container c = carInfoDetailed.getContentPane();
         c.setLayout(new BoxLayout(c, BoxLayout.Y_AXIS));
@@ -293,11 +292,7 @@ public class Car implements ActionListener{
         c.add(tablePhysical.getTableHeader());
         c.add(tablePhysical);
 
-
-
-
         return carInfoDetailed;
-
     }
 
     public static BufferedImage makeRoundedCorner(BufferedImage image, int cornerRadius) {
@@ -307,18 +302,11 @@ public class Car implements ActionListener{
 
         Graphics2D g2 = output.createGraphics();
 
-        // This is what we want, but it only does hard-clipping, i.e. aliasing
-        // g2.setClip(new RoundRectangle2D ...)
-
-        // so instead fake soft-clipping by first drawing the desired clip shape
-        // in fully opaque white with antialiasing enabled...
         g2.setComposite(AlphaComposite.Src);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.WHITE);
         g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
 
-        // ... then compositing the image on top,
-        // using the white shape from above as alpha source
         g2.setComposite(AlphaComposite.SrcAtop);
         g2.drawImage(image, 0, 0, null);
 
@@ -338,28 +326,6 @@ public class Car implements ActionListener{
             }
         }
         return false;
-    }
-
-    public static boolean openWebpage(URL url) {
-        try {
-            return openWebpage(url.toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static String insertSpaces(String s) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = s.length() - 1; i >= 0; i -= 3) {
-            if (i >= 2) {
-                sb.append(s.substring(i-2, i+1));
-                sb.append(" ");
-            } else {
-                sb.append(s.substring(0, i + 1));
-            }
-        }
-        return sb.reverse().toString();
     }
 
 }

@@ -1,13 +1,9 @@
-import afu.org.checkerframework.checker.oigj.qual.I;
 import tech.tablesaw.api.Table;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.security.spec.RSAOtherPrimeInfo;
-import java.util.ArrayList;
 
 public class CarList extends JPanel implements ActionListener {
 
@@ -26,9 +22,6 @@ public class CarList extends JPanel implements ActionListener {
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         listPanel = new JPanel();
         listPanel.setPreferredSize(new Dimension(400, 3200));
-//        GridLayout gridLayout = new GridLayout(0,1);
-//        gridLayout.setVgap(10);
-//        gridLayout.setHgap(10);
         BoxLayout boxLayout = new BoxLayout(listPanel, BoxLayout.PAGE_AXIS);
         listPanel.setLayout(boxLayout);
         boolean maxCars = false;

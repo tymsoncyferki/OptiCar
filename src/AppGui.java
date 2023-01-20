@@ -2,6 +2,7 @@ import Exceptions.EmptyDataException;
 import Exceptions.MaxPriceException;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +19,7 @@ public class AppGui extends JFrame implements ActionListener {
     JButton forwardButton;
     JLabel price, practicalityLabel, fuelLabel, errorlabel, gearBoxLabel;
     JComboBox<String> practicalityCombo;
-    JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck, cvtCheck, automaticCheck, manulaCheck;
+    JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck, cvtCheck, automaticCheck, manualCheck;
     // secondPage
     JPanel buttonPanel2, dragPanel, loadingPanel, infoPanel;
     JButton backButton, searchButton;
@@ -37,20 +38,20 @@ public class AppGui extends JFrame implements ActionListener {
         setLayout(mainLayout);
         ImageIcon icon = new ImageIcon("res/car-icon.png");
         setIconImage(icon.getImage());
-        setFont(new Font("Segoe UI",  Font.PLAIN, 18));
+        setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
 
         // menu
         menuBar = new JMenuBar();
         menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         aboutMenu = new JMenu("About");
         menuBar.add(aboutMenu);
-        helpMenu = new JMenu("Help");
-        menuBar.add(helpMenu);
         aboutApp = new JMenuItem("App info");
         aboutMenu.add(aboutApp);
         aboutMenu.addSeparator();
         aboutProject = new JMenuItem("Project info");
         aboutMenu.add(aboutProject);
+        helpMenu = new JMenu("Help");
+        menuBar.add(helpMenu);
         setJMenuBar(menuBar);
 
         // panel 1
@@ -58,49 +59,54 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.setPreferredSize(new Dimension(1000, 600));
         firstPage.setLayout(new BoxLayout(firstPage, BoxLayout.PAGE_AXIS));
 
+        JPanel startPanel = new JPanel();
+        JLabel startInfo = new JLabel("Find the perfect car for you!");
+        startInfo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
+        startInfo.setBorder(new EmptyBorder(20, 10, 30, 10));
+        startPanel.add(startInfo);
+        startPanel.setMaximumSize(new Dimension(400, 100));
+        firstPage.add(startPanel);
+
         // collecting data
         dataPanel = new JPanel();
-        //dataPanel.setBorder(BorderFactory.createTitledBorder("Price"));
         minPrice = new JTextField("0");
+        minPrice.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 16));
         minPrice.setPreferredSize(new Dimension(90, 30));
         maxPrice = new JTextField("0");
+        maxPrice.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 16));
         maxPrice.setPreferredSize(new Dimension(90, 30));
-        price = new JLabel("Enter price");
+        price = new JLabel("Enter price: ");
+        price.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
         dataPanel.add(price);
         dataPanel.add(minPrice);
         dataPanel.add(maxPrice);
-        dataPanel.setPreferredSize(new Dimension(100,60));
         dataPanel.setMaximumSize(new Dimension(400,100));
-        firstPage.add(Box.createRigidArea(new Dimension(0,50)));
         firstPage.add(dataPanel);
-        firstPage.add(Box.createRigidArea(new Dimension(0,50)));
-
-
-
-
+        firstPage.add(Box.createRigidArea(new Dimension(0,30)));
 
         // combo box
-
         practicalityCombo = new JComboBox<>();
+        practicalityCombo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 16));
         practicalityCombo.addItem("Universal");
         practicalityCombo.addItem("City");
         practicalityCombo.addItem("Route");
         practicalityCombo.addItem("Family");
         practicalityCombo.setPreferredSize(new Dimension(160,50));
         practicalityCombo.addActionListener(this);
-        practicalityLabel = new JLabel("Destiny: ");
+        practicalityLabel = new JLabel("Intended use: ");
+        practicalityLabel.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
         practicalityPanel = new JPanel();
         practicalityPanel.add(practicalityLabel);
         practicalityPanel.add(practicalityCombo);
         practicalityPanel.setMaximumSize(new Dimension(300,100));
         firstPage.add(practicalityPanel);
-        firstPage.add(Box.createRigidArea(new Dimension(0,50)));
+        firstPage.add(Box.createRigidArea(new Dimension(0,30)));
 
 
         // fuel panel
         fuelPanel = new JPanel();
         fuelLabel = new JLabel("Fuel type: ");
-        fuelLabel.setPreferredSize(new Dimension(60,20));
+        fuelLabel.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
         fuelPanel.add(fuelLabel);
 
         petrolCheck = new JCheckBox("Petrol",false);
@@ -118,7 +124,6 @@ public class AppGui extends JFrame implements ActionListener {
         electricCheck.addActionListener(this);
         dieselCheck.addActionListener(this);
 
-
         fuelPanel.add(petrolCheck);
         fuelPanel.add(hybridCheck);
         fuelPanel.add(electricCheck);
@@ -126,31 +131,32 @@ public class AppGui extends JFrame implements ActionListener {
         fuelPanel.setMaximumSize(new Dimension(700,30));
 
         firstPage.add(fuelPanel);
-        firstPage.add(Box.createRigidArea(new Dimension(0,50)));
+        firstPage.add(Box.createRigidArea(new Dimension(0,30)));
 
 
         // GearBox
         gearBoxPanel = new JPanel();
 
         gearBoxLabel = new JLabel("Gearbox: ");
-        gearBoxLabel.setPreferredSize(new Dimension(60,20));
+        gearBoxLabel.setPreferredSize(new Dimension(80,20));
+        gearBoxLabel.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
 
         cvtCheck = new JCheckBox("CVT", false);
         automaticCheck = new JCheckBox("Automatic", false);
-        manulaCheck = new JCheckBox("Manual", false);
+        manualCheck = new JCheckBox("Manual", false);
 
         cvtCheck.setPreferredSize(new Dimension(50,20));
         automaticCheck.setPreferredSize(new Dimension(85,20));
-        manulaCheck.setPreferredSize(new Dimension(85,20));
+        manualCheck.setPreferredSize(new Dimension(85,20));
 
         cvtCheck.addActionListener(this);
         automaticCheck.addActionListener(this);
-        manulaCheck.addActionListener(this);
+        manualCheck.addActionListener(this);
 
         gearBoxPanel.add(gearBoxLabel);
         gearBoxPanel.add(cvtCheck);
         gearBoxPanel.add(automaticCheck);
-        gearBoxPanel.add(manulaCheck);
+        gearBoxPanel.add(manualCheck);
         gearBoxPanel.setMaximumSize(new Dimension(700,30));
 
         firstPage.add(gearBoxPanel);
@@ -191,6 +197,7 @@ public class AppGui extends JFrame implements ActionListener {
         infoPanel = new JPanel();
         listInfo = new JLabel("Choose traits and sort them by importance:");
         listInfo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
+        listInfo.setBorder(new EmptyBorder(10, 10, 30, 10));
         infoPanel.add(listInfo);
         secondPage.add(infoPanel, BorderLayout.NORTH);
         // drag and drop
@@ -240,10 +247,13 @@ public class AppGui extends JFrame implements ActionListener {
             try {
                 CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
                 CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
-                if (CarData.maxPrice == 0 & CarData.minPrice == 0){
+                if (CarData.minPrice < 5000) {
+                    CarData.minPrice = 5000;
+                }
+                if (CarData.maxPrice == 0) {
                     CarData.maxPrice = 15000000;
                 }
-                else if (CarData.maxPrice < 1550 | CarData.minPrice > 15000000){
+                else if (CarData.maxPrice < 5000 | CarData.minPrice > 15000000){
                     throw new MaxPriceException();
                 }
 
@@ -252,7 +262,7 @@ public class AppGui extends JFrame implements ActionListener {
                 boolean fuelFlag = false;
                 boolean gearFlag = false;
                 if (CarData.fuel.size() == 0){
-                    //hrow new FuelException();
+                    //throw new FuelException();
                     CarData.fuel.add("Petrol");
                     CarData.fuel.add("Hybrid");
                     CarData.fuel.add("Electric");
@@ -272,9 +282,11 @@ public class AppGui extends JFrame implements ActionListener {
                 }
                 if (fuelFlag) {
                     CarData.fuel.removeAll(CarData.fuel);
+                    fuelFlag = false;
                 }
                 if (gearFlag) {
                     CarData.gearBox.removeAll(CarData.gearBox);
+                    gearFlag = false;
                 }
                 mainLayout.next(this.getContentPane());
                 errorlabel.setText("");
@@ -367,14 +379,13 @@ public class AppGui extends JFrame implements ActionListener {
                 CarData.gearBox.remove(automaticCheck.getText());
             }
         }
-        if (e.getSource().equals(manulaCheck)){
-            if (manulaCheck.isSelected()){
-                CarData.gearBox.add(manulaCheck.getText());
+        if (e.getSource().equals(manualCheck)){
+            if (manualCheck.isSelected()){
+                CarData.gearBox.add(manualCheck.getText());
             }else {
-                CarData.gearBox.remove(manulaCheck.getText());
+                CarData.gearBox.remove(manualCheck.getText());
             }
         }
-
 
     }
 
