@@ -18,7 +18,7 @@ public class CarList extends JPanel implements ActionListener {
     JPanel listPanel, buttonPanel;
     JButton backButton, forwardButton, menuButton;
     JPanel loadingPanel;
-    static final ImageIcon loading = new ImageIcon("loadgif.gif");
+    static final ImageIcon loading = new ImageIcon("res/loadgif.gif");
 
     public CarList() {
 

@@ -1,3 +1,5 @@
+import Exceptions.EmptyDataException;
+import Exceptions.MaxPriceException;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.*;
 import java.awt.*;
@@ -18,17 +20,38 @@ public class AppGui extends JFrame implements ActionListener {
     JComboBox<String> practicalityCombo;
     JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck, cvtCheck, automaticCheck, manulaCheck;
     // secondPage
-    JPanel buttonPanel2, dragPanel, loadingPanel;
+    JPanel buttonPanel2, dragPanel, loadingPanel, infoPanel;
     JButton backButton, searchButton;
     JLayeredPane layeredPane;
-    JLabel loadingGif;
+    JLabel loadingGif, listInfo;
+    // menu
+    JMenuBar menuBar;
+    JMenu aboutMenu, helpMenu;
+    JMenuItem aboutApp, aboutProject;
 
     public AppGui() {
-        super("findcar");
+        super("Findcar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1000, 600));
         setLocation(0, 0);
         setLayout(mainLayout);
+        ImageIcon icon = new ImageIcon("res/car-icon.png");
+        setIconImage(icon.getImage());
+        setFont(new Font("Segoe UI",  Font.PLAIN, 12));
+
+        // menu
+        menuBar = new JMenuBar();
+        menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+        aboutMenu = new JMenu("About");
+        menuBar.add(aboutMenu);
+        helpMenu = new JMenu("Help");
+        menuBar.add(helpMenu);
+        aboutApp = new JMenuItem("App info");
+        aboutMenu.add(aboutApp);
+        aboutMenu.addSeparator();
+        aboutProject = new JMenuItem("Project info");
+        aboutMenu.add(aboutProject);
+        setJMenuBar(menuBar);
 
         // panel 1
         firstPage = new JPanel();
@@ -56,10 +79,10 @@ public class AppGui extends JFrame implements ActionListener {
         // combo box
 
         practicalityCombo = new JComboBox<>();
+        practicalityCombo.addItem("Universal");
         practicalityCombo.addItem("City");
         practicalityCombo.addItem("Route");
         practicalityCombo.addItem("Family");
-        practicalityCombo.addItem("Universal");
         practicalityCombo.setPreferredSize(new Dimension(160,50));
         practicalityCombo.addActionListener(this);
         practicalityLabel = new JLabel("Destiny: ");
@@ -161,6 +184,12 @@ public class AppGui extends JFrame implements ActionListener {
         secondPage.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
         secondPage.setLayout(new BorderLayout());
 
+        // info
+        infoPanel = new JPanel();
+        listInfo = new JLabel("Choose traits and sort them by importance:");
+        listInfo.setFont(new Font("Segoe UI",  Font.PLAIN, 18));
+        infoPanel.add(listInfo);
+        secondPage.add(infoPanel, BorderLayout.NORTH);
         // drag and drop
         dragPanel = new DragAndDropList();
         secondPage.add(dragPanel, BorderLayout.CENTER);
@@ -185,7 +214,7 @@ public class AppGui extends JFrame implements ActionListener {
 
         loadingPanel = new JPanel();
         loadingPanel.setLayout(new BorderLayout());
-        ImageIcon loading = new ImageIcon("loadgif.gif");
+        ImageIcon loading = new ImageIcon("res/loadgif.gif");
         loadingGif = new JLabel(loading);
         loadingPanel.add(loadingGif);
         loadingPanel.setVisible(false);
@@ -208,20 +237,41 @@ public class AppGui extends JFrame implements ActionListener {
             try {
                 CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
                 CarData.setMaxPrice(Integer.parseInt(maxPrice.getText()));
-
-                if (CarData.maxPrice < 1550 | CarData.minPrice > 15000000){
+                if (CarData.maxPrice == 0 & CarData.minPrice == 0){
+                    CarData.maxPrice = 15000000;
+                }
+                else if (CarData.maxPrice < 1550 | CarData.minPrice > 15000000){
                     throw new MaxPriceException();
                 }
+
+
                 CarData.practicality = (String) practicalityCombo.getSelectedItem();
+                boolean fuelFlag = false;
+                boolean gearFlag = false;
                 if (CarData.fuel.size() == 0){
-                    throw new FuelException();
+                    //hrow new FuelException();
+                    CarData.fuel.add("Petrol");
+                    CarData.fuel.add("Hybrid");
+                    CarData.fuel.add("Electric");
+                    CarData.fuel.add("Diesel");
+                    fuelFlag = true;
                 }
                 if (CarData.gearBox.size() == 0){
-                    throw new GearBoxException();
+                    //throw new GearBoxException();
+                    CarData.gearBox.add("CVT");
+                    CarData.gearBox.add("Automatic");
+                    CarData.gearBox.add("Manual");
+                    gearFlag = true;
                 }
                 CarData.filterData();
                 if (CarData.filteredCars.isEmpty()){
                     throw new EmptyDataException();
+                }
+                if (fuelFlag) {
+                    CarData.fuel.removeAll(CarData.fuel);
+                }
+                if (gearFlag) {
+                    CarData.gearBox.removeAll(CarData.gearBox);
                 }
                 mainLayout.next(this.getContentPane());
                 errorlabel.setText("");
@@ -234,12 +284,12 @@ public class AppGui extends JFrame implements ActionListener {
             catch (MaxPriceException p){
                 errorlabel.setText("There are no cars at such a price!");
             }
-            catch (FuelException p){
-                errorlabel.setText("You have to select some type of fuel!");
-            }
-            catch (GearBoxException p){
-                errorlabel.setText("You have to select some type of gearbox!");
-            }
+//            catch (FuelException p){
+//                errorlabel.setText("You have to select some type of fuel!");
+//            }
+//            catch (GearBoxException p){
+//                errorlabel.setText("You have to select some type of gearbox!");
+//            }
             catch (EmptyDataException p){
                 errorlabel.setText("There are no such cars!");
             }
