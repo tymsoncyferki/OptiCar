@@ -2,6 +2,7 @@ import org.imgscalr.Scalr;
 import tech.tablesaw.api.Table;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -128,7 +129,7 @@ public class Car implements ActionListener{
         //carPhoto.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         photoPanel.add(carPhoto);
         mainPanel.add(photoPanel, BorderLayout.WEST);
-        mainPanel.setMaximumSize(new Dimension(3000,165));
+        mainPanel.setMaximumSize(new Dimension(1000,165));
 
         JLabel searchWeb = new JLabel("Search web");
         searchWeb.setBorder(new EmptyBorder(10, 10, 10, 10));

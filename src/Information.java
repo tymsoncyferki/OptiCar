@@ -89,7 +89,8 @@ public abstract class Information {
                         "over 2500 cars from years 2022 and 2023. May be updated in the future. \n\n"
                         + "WARNING\n"
                         + "Technical specifications and prices may be inacurate. To check current prices and availability" +
-                        " in your area it is recommended to go to the official website of the car manufacturer."
+                        " in your area it is recommended to go to the official website of the car manufacturer. Our " +
+                        "\"search web\" button will help you with that."
         );
         StyledDocument doc = textArea.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), new SimpleAttributeSet(), true);
