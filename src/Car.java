@@ -111,6 +111,7 @@ public class Car implements ActionListener{
     public JFrame CarInfoDetailed() throws IOException{
 
         JFrame carInfoDetailed  = new JFrame();
+        carInfoDetailed.setTitle("More info");
         carInfoDetailed.setMinimumSize(new Dimension(1000, 500));
         carInfoDetailed.setResizable(false);
         carInfoDetailed.setLocation(0, 30);
@@ -120,7 +121,12 @@ public class Car implements ActionListener{
                 {"Price", price + " $"},
                 {"Body Type", body}};
         String columnBasic[]={"Basic info", ""};
-        JTable tableBasic = new JTable(dataBasic,columnBasic);
+        JTable tableBasic = new JTable(dataBasic,columnBasic) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tableBasic.getTableHeader().setResizingAllowed(false);
 
 
         String dataEngine[][]={
@@ -132,8 +138,9 @@ public class Car implements ActionListener{
         JTable tableEngine = new JTable(dataEngine,columnEngine) {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
+            }
         };
+        tableEngine.getTableHeader().setResizingAllowed(false);
 
         String dataTransmission[][]={
                 {"Gear box", gearBox},
@@ -142,8 +149,9 @@ public class Car implements ActionListener{
         JTable tableTransmission = new JTable(dataTransmission,columnTransmission) {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
-        };;
+            }
+        };
+        tableTransmission.getTableHeader().setResizingAllowed(false);
 
         String dataConsuption[][]={
                 {"Mileage in city", cityConsumption + " miles per galon"},
@@ -152,8 +160,9 @@ public class Car implements ActionListener{
         JTable tableConsuption = new JTable(dataConsuption,columnConsuption) {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
-        };;
+            }
+        };
+        tableConsuption.getTableHeader().setResizingAllowed(false);
 
         String dataPhysical [][]={
                 {"Number of doors", doors},
@@ -166,8 +175,9 @@ public class Car implements ActionListener{
         JTable tablePhysical = new JTable(dataPhysical,columnPhysical) {
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
-        };;
+            }
+        };
+        tablePhysical.getTableHeader().setResizingAllowed(false);
 
 
         Container c = carInfoDetailed.getContentPane();
