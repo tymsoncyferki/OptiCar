@@ -2,7 +2,6 @@ import org.imgscalr.Scalr;
 import tech.tablesaw.api.Table;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -107,7 +107,6 @@ public class Car implements ActionListener{
         infoPanel.add(carName, Component.LEFT_ALIGNMENT);
         JLabel carInfo = new JLabel(engineType + " | " + fuelType);
         infoPanel.add(carInfo, Component.LEFT_ALIGNMENT);
-        //String sPrice = insertSpaces(String.valueOf(price));
         JLabel carPrice = new JLabel(price + "$");
         carPrice.setForeground(myColor);
         carPrice.setFont(new Font("Segoe UI Semibold",  Font.PLAIN, 20));
@@ -117,7 +116,13 @@ public class Car implements ActionListener{
         JPanel photoPanel = new JPanel();
         photoPanel.setSize(new Dimension(260, 140));
         URL url = new URL(photo);
-        BufferedImage originalImage = ImageIO.read(url);
+        BufferedImage originalImage;
+        try {
+            originalImage = ImageIO.read(url);
+        } catch (IOException e) {
+            File file = new File("res/no_photo.jpg");
+            originalImage = ImageIO.read(file);
+        }
         originalImage = Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 260, 140, Scalr.OP_ANTIALIAS);
         if (originalImage.getHeight() > 140) {
             int h = (originalImage.getHeight() - 140) / 2;
@@ -126,7 +131,6 @@ public class Car implements ActionListener{
         BufferedImage proccessedImage = makeRoundedCorner(originalImage, 10);
         ImageIcon icon = new ImageIcon(proccessedImage);
         JLabel carPhoto = new JLabel(icon);
-        //carPhoto.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         photoPanel.add(carPhoto);
         mainPanel.add(photoPanel, BorderLayout.WEST);
         mainPanel.setMaximumSize(new Dimension(1000,165));
@@ -296,17 +300,14 @@ public class Car implements ActionListener{
         return output;
     }
 
-    public static boolean openWebpage(URI uri) {
+    public static void openWebpage(URI uri) {
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
             try {
                 desktop.browse(uri);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         }
-        return false;
     }
 
     @Override

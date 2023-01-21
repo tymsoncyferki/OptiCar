@@ -45,8 +45,6 @@ public class AppGui extends JFrame implements ActionListener {
         setPreferredSize(new Dimension(1000, 600));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((int) (screenSize.getWidth() / 2 - 500), (int) (screenSize.getHeight() / 10));
-        //setLocation(0, 0);
-        //setLocationRelativeTo(null);
         setLayout(mainLayout);
         ImageIcon icon = new ImageIcon("res/car-icon.png");
         setIconImage(icon.getImage());
@@ -502,7 +500,6 @@ public class AppGui extends JFrame implements ActionListener {
             CarData.loadData();
             isConnected = true;
         } catch (IOException e) {
-            //throw new RuntimeException(e);
             isConnected = false;
         }
         FlatLightLaf.setup();
