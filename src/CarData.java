@@ -1,7 +1,13 @@
 import tech.tablesaw.api.*;
 import tech.tablesaw.io.csv.CsvReadOptions;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -57,15 +63,18 @@ public abstract class CarData{
     }
 
 
-    public static void loadData(){
+    public static void loadData() throws IOException {
+        URL url = new URL("https://raw.githubusercontent.com/tymsoncyferki/Java-findcar/main/cars.csv");
+        InputStream inputStream = url.openStream();
         ColumnType[] types = {ColumnType.STRING, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE,ColumnType.DOUBLE,ColumnType.DOUBLE,ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE};
         try {
             mainTable = Table.read().csv(CsvReadOptions
-                    .builder("res/cars.csv")
+                    .builder(inputStream, "UTF-8")
                     .columnTypes(types));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        inputStream.close();
     }
 
     public static void setMinPrice(int minPrice) {

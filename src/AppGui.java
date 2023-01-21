@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AppGui extends JFrame implements ActionListener {
@@ -106,7 +107,7 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.setLayout(new BoxLayout(firstPage, BoxLayout.PAGE_AXIS));
 
         JPanel startPanel = new JPanel();
-        JLabel startInfo = new JLabel("Find the perfect car for yourself!");
+        JLabel startInfo = new JLabel("Find a perfect car for yourself!");
         startInfo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
         startInfo.setBorder(new EmptyBorder(20, 10, 30, 10));
         startPanel.add(startInfo);
@@ -442,7 +443,12 @@ public class AppGui extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        CarData.loadData();
+        try {
+            CarData.loadData();
+        } catch (IOException e) {
+            //throw new RuntimeException(e);
+
+        }
         FlatLightLaf.setup();
         AppGui app = new AppGui();
         app.showGui();
