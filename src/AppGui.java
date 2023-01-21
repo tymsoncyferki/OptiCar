@@ -3,19 +3,25 @@ import Exceptions.MaxPriceException;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class AppGui extends JFrame implements ActionListener {
 
     CardLayout mainLayout = new CardLayout();
     CardLayout listLayout = new CardLayout();
     JPanel firstPage, secondPage, thirdPage;
+
+    // connection
+    static boolean isConnected;
+    JDialog connectionDialog;
+    JTextPane connectText;
     // firstPage
     JPanel dataPanel, buttonPanel1, practicalityPanel, fuelPanel, errorPanel, gearBoxPanel;
     JTextField minPrice, maxPrice;
@@ -37,7 +43,10 @@ public class AppGui extends JFrame implements ActionListener {
         super("Findcar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1000, 600));
-        setLocation(0, 0);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation((int) (screenSize.getWidth() / 2 - 500), (int) (screenSize.getHeight() / 10));
+        //setLocation(0, 0);
+        //setLocationRelativeTo(null);
         setLayout(mainLayout);
         ImageIcon icon = new ImageIcon("res/car-icon.png");
         setIconImage(icon.getImage());
@@ -287,6 +296,44 @@ public class AppGui extends JFrame implements ActionListener {
         // end panel3
 
         pack();
+
+        // connection
+        if (!isConnected) {
+            this.setEnabled(false);
+            connectionDialog = new JDialog(this, "Connection error");
+            connectionDialog.setPreferredSize(new Dimension(250, 200));
+            JPanel connectionPanel = new JPanel(new BorderLayout());
+            connectText = new JTextPane();
+            String connectInfo = "\nThere is a problem with loading data. " +
+                    "Check your internet connection and try again.";
+            StyledDocument doc = connectText.getStyledDocument();
+            SimpleAttributeSet center = new SimpleAttributeSet();
+            StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+            doc.setParagraphAttributes(0, doc.getLength(), center, true);
+            connectText.setText(connectInfo);
+            connectText.setEditable(false);
+            connectionPanel.add(connectText, BorderLayout.CENTER);
+            JButton reloadButton = new JButton("Reload");
+            reloadButton.addActionListener(this);
+            reloadButton.setActionCommand("reload");
+            reloadButton.setPreferredSize(new Dimension(80, 30));
+            JPanel reloadPane = new JPanel();
+            reloadPane.add(reloadButton);
+            connectionPanel.add(reloadPane, BorderLayout.SOUTH);
+            connectionPanel.setMaximumSize(new Dimension(200, 180));
+            connectionDialog.add(connectionPanel, BorderLayout.CENTER);
+            connectionDialog.setResizable(false);
+            connectionDialog.pack();
+            connectionDialog.setLocationRelativeTo(this.getContentPane());
+            connectionDialog.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            connectionDialog.setVisible(true);
+        }
+
     }
 
     @Override
@@ -305,12 +352,10 @@ public class AppGui extends JFrame implements ActionListener {
                     throw new MaxPriceException();
                 }
 
-
                 CarData.practicality = (String) practicalityCombo.getSelectedItem();
                 boolean fuelFlag = false;
                 boolean gearFlag = false;
                 if (CarData.fuel.size() == 0){
-                    //throw new FuelException();
                     CarData.fuel.add("Petrol");
                     CarData.fuel.add("Hybrid");
                     CarData.fuel.add("Electric");
@@ -318,7 +363,6 @@ public class AppGui extends JFrame implements ActionListener {
                     fuelFlag = true;
                 }
                 if (CarData.gearBox.size() == 0){
-                    //throw new GearBoxException();
                     CarData.gearBox.add("CVT");
                     CarData.gearBox.add("Automatic");
                     CarData.gearBox.add("Manual");
@@ -340,23 +384,37 @@ public class AppGui extends JFrame implements ActionListener {
                 errorlabel.setText("");
             }
             catch (NumberFormatException p) {
-
                 errorlabel.setText("Please enter a correct price!");
-
             }
             catch (MaxPriceException p){
                 errorlabel.setText("There are no cars at such a price!");
             }
-//            catch (FuelException p){
-//                errorlabel.setText("You have to select some type of fuel!");
-//            }
-//            catch (GearBoxException p){
-//                errorlabel.setText("You have to select some type of gearbox!");
-//            }
+
             catch (EmptyDataException p){
                 errorlabel.setText("There are no such cars!");
             }
 
+
+        }
+        if (e.getActionCommand().equals("reload")) {
+            connectText.setText("\n\nLoading...");
+            new Thread(() -> {
+                try {
+                    connectText.setText("\n\nLoading...");
+                    TimeUnit.SECONDS.sleep(1);
+                    CarData.loadData();
+                    isConnected = true;
+                    this.setEnabled(true);
+                    connectionDialog.setVisible(false);
+
+                } catch (IOException ex) {
+                    String connectInfo = "\nThere is a problem with loading data. " +
+                            "Check your internet connection and try again.";
+                    connectText.setText(connectInfo);
+                } catch (InterruptedException ignored) {
+
+                }
+            }).start();
 
         }
 
@@ -365,19 +423,16 @@ public class AppGui extends JFrame implements ActionListener {
         }
         if (e.getActionCommand().equals("search")) {
             loadingPanel.setVisible(true);
-            Thread listingCars = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    thirdPage.removeAll();
-                    CarData.traits = new ArrayList<>(DragAndDropList.dndList.getSelectedValuesList());
-                    CarData.findCars();
-                    Car.frame = AppGui.this;
-                    CarList.frame = AppGui.this;
-                    CarList carsList = new CarList();
-                    thirdPage.add(carsList);
-                    mainLayout.next(AppGui.this.getContentPane());
-                    loadingPanel.setVisible(false);
-                }
+            Thread listingCars = new Thread(() -> {
+                thirdPage.removeAll();
+                CarData.traits = new ArrayList<>(DragAndDropList.dndList.getSelectedValuesList());
+                CarData.findCars();
+                Car.frame = AppGui.this;
+                CarList.frame = AppGui.this;
+                CarList carsList = new CarList();
+                thirdPage.add(carsList);
+                mainLayout.next(AppGui.this.getContentPane());
+                loadingPanel.setVisible(false);
             });
             listingCars.start();
 
@@ -445,19 +500,14 @@ public class AppGui extends JFrame implements ActionListener {
     public static void main(String[] args) {
         try {
             CarData.loadData();
+            isConnected = true;
         } catch (IOException e) {
             //throw new RuntimeException(e);
-
+            isConnected = false;
         }
         FlatLightLaf.setup();
         AppGui app = new AppGui();
         app.showGui();
-
-//        String fonts[] =
-//                GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-//        for (int i = 0; i < fonts.length; i++) {
-//            System.out.println(fonts[i]);
-//        }
 
     }
 }
