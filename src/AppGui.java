@@ -18,25 +18,25 @@ public class AppGui extends JFrame implements ActionListener {
     CardLayout listLayout = new CardLayout(); // Layout list samochodów
     JPanel firstPage, secondPage, thirdPage;
     // Połączenie
-    static boolean isConnected;
-    JDialog connectionDialog;
-    JTextPane connectText;
+    private static boolean isConnected;
+    private JDialog connectionDialog;
+    private JTextPane connectText;
     // Pierwsza strona
-    JPanel dataPanel, buttonPanel1, practicalityPanel, fuelPanel, errorPanel, gearBoxPanel;
-    JTextField minPrice, maxPrice;
-    JButton forwardButton;
-    JLabel price, practicalityLabel, fuelLabel, errorlabel, gearBoxLabel;
-    JComboBox<String> practicalityCombo;
-    JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck, cvtCheck, automaticCheck, manualCheck;
+    private JPanel dataPanel, buttonPanel1, practicalityPanel, fuelPanel, errorPanel, gearBoxPanel;
+    private JTextField minPrice, maxPrice;
+    private JButton forwardButton;
+    private JLabel price, practicalityLabel, fuelLabel, errorlabel, gearBoxLabel;
+    private JComboBox<String> practicalityCombo;
+    private JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck, cvtCheck, automaticCheck, manualCheck;
     // Druga strona
-    JPanel buttonPanel2, dragPanel, loadingPanel, infoPanel;
-    JButton backButton, searchButton;
-    JLayeredPane layeredPane;
-    JLabel loadingGif, listInfo;
+    private JPanel buttonPanel2, dragPanel, loadingPanel, infoPanel;
+    private JButton backButton, searchButton;
+    private JLayeredPane layeredPane;
+    private JLabel loadingGif, listInfo;
     // Menu
-    JMenuBar menuBar;
-    JMenu aboutMenu, helpMenu;
-    JMenuItem aboutApp, aboutProject, filterHelp, traitsHelp;
+    private JMenuBar menuBar;
+    private JMenu aboutMenu, helpMenu;
+    private JMenuItem aboutApp, aboutProject, filterHelp, traitsHelp;
 
     public AppGui() {
 
@@ -498,7 +498,7 @@ public class AppGui extends JFrame implements ActionListener {
 
     }
 
-    public void showGui() {
+    private void showGui() {
         this.setVisible(true);
     }
 

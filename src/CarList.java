@@ -11,10 +11,10 @@ public class CarList extends JPanel implements ActionListener {
     static int listNumber = 0; // obecna strona
     static AppGui frame; // główne okno
     static Table Cars; // Przefiltrowane i posortowane samochody
-    JPanel listPanel, buttonPanel;
-    JButton backButton, forwardButton, menuButton;
-    JPanel loadingPanel;
-    static final ImageIcon loading = new ImageIcon("res/loadgif.gif");
+    private JPanel listPanel, buttonPanel;
+    private JButton backButton, forwardButton, menuButton;
+    private JPanel loadingPanel;
+    private static final ImageIcon loading = new ImageIcon("res/loadgif.gif");
 
     // Panel do wyświetlania samochodów
     public CarList() {

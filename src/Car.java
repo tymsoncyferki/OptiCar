@@ -20,22 +20,22 @@ import java.util.Map;
 public class Car implements ActionListener{
 
     static JFrame frame; // główne okno
-    JPanel mainPanel;
-    JFrame carInfoDetailed;
+    private JPanel mainPanel;
+    private JFrame carInfoDetailed;
     // Pola z danymi samochodu
-    String photo;
-    String brand;
-    String model;
-    String body;
-    int price;
-    String engineType;
-    String fuelType;
-    String torque;
-    String power;
-    String gearBox;
-    String driveType;
-    String cityConsumption;
-    String highwayConsumption;
+    private String photo;
+    private String brand;
+    private String model;
+    private String body;
+    private int price;
+    private String engineType;
+    private String fuelType;
+    private String torque;
+    private String power;
+    private String gearBox;
+    private String driveType;
+    private String cityConsumption;
+    private String highwayConsumption;
     private String height;
     private String weight;
     private String length;
@@ -304,7 +304,7 @@ public class Car implements ActionListener{
     }
 
     // Otwieranie strony w przeglądarce
-    public static void openWebpage(URI uri) {
+    private static void openWebpage(URI uri) {
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
             try {

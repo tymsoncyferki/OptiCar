@@ -18,9 +18,6 @@ public abstract class CarData {
     static Table mainTable; // Zczytane dane
     static Table filteredCars; // Przefiltrowane dane
 
-    public CarData() {
-    }
-
     // Filtrowanie danych
     public static void filterData() {
         filteredCars = mainTable

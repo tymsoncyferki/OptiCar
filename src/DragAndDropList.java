@@ -7,8 +7,8 @@ import java.awt.event.MouseEvent;
 public class DragAndDropList extends JPanel {
 
     static JList<String> dndList; // Lista kafelków
-    static DefaultListModel<String> traitsList;
-    String[] traits = new String[] { "Dynamics", "Practicality", "Safety", "Sport character", "Equipment", "Efficiency", "Price", "Off-road capabilities"};
+    private static DefaultListModel<String> traitsList;
+    private String[] traits = new String[] { "Dynamics", "Practicality", "Safety", "Sport character", "Equipment", "Efficiency", "Price", "Off-road capabilities"};
 
     // Panel z kafelkami
     public DragAndDropList() {
@@ -97,7 +97,7 @@ public class DragAndDropList extends JPanel {
     }
 
     // Wygląd kafelków
-    public static class buttonCellRenderer extends DefaultListCellRenderer {
+    private static class buttonCellRenderer extends DefaultListCellRenderer {
 
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
