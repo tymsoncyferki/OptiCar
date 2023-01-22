@@ -14,33 +14,34 @@ import java.util.concurrent.TimeUnit;
 
 public class AppGui extends JFrame implements ActionListener {
 
-    CardLayout mainLayout = new CardLayout();
-    CardLayout listLayout = new CardLayout();
+    CardLayout mainLayout = new CardLayout(); // Layout aplikacji
+    CardLayout listLayout = new CardLayout(); // Layout list samochodów
     JPanel firstPage, secondPage, thirdPage;
-
-    // connection
+    // Połączenie
     static boolean isConnected;
     JDialog connectionDialog;
     JTextPane connectText;
-    // firstPage
+    // Pierwsza strona
     JPanel dataPanel, buttonPanel1, practicalityPanel, fuelPanel, errorPanel, gearBoxPanel;
     JTextField minPrice, maxPrice;
     JButton forwardButton;
     JLabel price, practicalityLabel, fuelLabel, errorlabel, gearBoxLabel;
     JComboBox<String> practicalityCombo;
     JCheckBox petrolCheck, hybridCheck, electricCheck, dieselCheck, cvtCheck, automaticCheck, manualCheck;
-    // secondPage
+    // Druga strona
     JPanel buttonPanel2, dragPanel, loadingPanel, infoPanel;
     JButton backButton, searchButton;
     JLayeredPane layeredPane;
     JLabel loadingGif, listInfo;
-    // menu
+    // Menu
     JMenuBar menuBar;
     JMenu aboutMenu, helpMenu;
     JMenuItem aboutApp, aboutProject, filterHelp, traitsHelp;
 
     public AppGui() {
-        super("Findcar");
+
+        // Ustawienia głównego okna aplikacji
+        super("OptiCar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1000, 600));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -50,7 +51,7 @@ public class AppGui extends JFrame implements ActionListener {
         setIconImage(icon.getImage());
         setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
 
-        // menu
+        // Pasek menu
         menuBar = new JMenuBar();
         menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         aboutMenu = new JMenu("About");
@@ -108,11 +109,13 @@ public class AppGui extends JFrame implements ActionListener {
         helpMenu.add(traitsHelp);
         setJMenuBar(menuBar);
 
-        // panel 1
+        // Pierwsza strona
         firstPage = new JPanel();
         firstPage.setPreferredSize(new Dimension(1000, 600));
         firstPage.setLayout(new BoxLayout(firstPage, BoxLayout.PAGE_AXIS));
 
+
+        // Panel informacyjny
         JPanel startPanel = new JPanel();
         JLabel startInfo = new JLabel("Find a perfect car for yourself!");
         startInfo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
@@ -121,7 +124,7 @@ public class AppGui extends JFrame implements ActionListener {
         startPanel.setMaximumSize(new Dimension(400, 100));
         firstPage.add(startPanel);
 
-        // collecting data
+        // Panel cena
         dataPanel = new JPanel();
         minPrice = new JTextField("0");
         minPrice.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 16));
@@ -129,7 +132,7 @@ public class AppGui extends JFrame implements ActionListener {
         maxPrice = new JTextField("0");
         maxPrice.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 16));
         maxPrice.setPreferredSize(new Dimension(90, 30));
-        price = new JLabel("Enter price: ");
+        price = new JLabel("Enter price ($): ");
         price.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
         dataPanel.add(price);
         dataPanel.add(minPrice);
@@ -138,7 +141,7 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.add(dataPanel);
         firstPage.add(Box.createRigidArea(new Dimension(0,30)));
 
-        // combo box
+        // Panel przeznaczenie
         practicalityCombo = new JComboBox<>();
         practicalityCombo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 16));
         practicalityCombo.addItem("Universal");
@@ -157,7 +160,7 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.add(Box.createRigidArea(new Dimension(0,30)));
 
 
-        // fuel panel
+        // Panel paliwo
         fuelPanel = new JPanel();
         fuelLabel = new JLabel("Fuel type: ");
         fuelLabel.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
@@ -188,7 +191,7 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.add(Box.createRigidArea(new Dimension(0,30)));
 
 
-        // GearBox
+        // Panel skrzynia biegów
         gearBoxPanel = new JPanel();
 
         gearBoxLabel = new JLabel("Gearbox: ");
@@ -217,7 +220,7 @@ public class AppGui extends JFrame implements ActionListener {
         firstPage.add(Box.createVerticalGlue());
 
 
-        // error
+        // Panel błędów
         errorlabel = new JLabel("");
         errorlabel.setFont(new Font("Verdana", Font.BOLD, 15));
         errorlabel.setForeground(Color.red);
@@ -227,7 +230,7 @@ public class AppGui extends JFrame implements ActionListener {
 
         firstPage.add(errorPanel);
 
-        // buttons
+        // Panel przycisków
         forwardButton = new JButton("Next");
         forwardButton.setActionCommand("forward");
         forwardButton.setPreferredSize(new Dimension(90, 30));
@@ -240,25 +243,26 @@ public class AppGui extends JFrame implements ActionListener {
 
 
         add(firstPage);
-        // end panel 1
+        // Koniec pierwszej strony
 
-        // panel 2
+        // Druga strona
         secondPage = new JPanel();
         secondPage.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
         secondPage.setLayout(new BorderLayout());
 
-        // info
+        // Panel informacyjny
         infoPanel = new JPanel();
         listInfo = new JLabel("Choose traits and sort them by importance:");
         listInfo.setFont(new Font("Segoe UI Semilight",  Font.PLAIN, 18));
         listInfo.setBorder(new EmptyBorder(10, 10, 30, 10));
         infoPanel.add(listInfo);
         secondPage.add(infoPanel, BorderLayout.NORTH);
-        // drag and drop
+
+        // Panel Drag and drop
         dragPanel = new DragAndDropList();
         secondPage.add(dragPanel, BorderLayout.CENTER);
 
-        // buttons
+        // Panel przycisków
         backButton = new JButton("Back");
         backButton.setActionCommand("back");
         backButton.setPreferredSize(new Dimension(90, 30));
@@ -270,9 +274,9 @@ public class AppGui extends JFrame implements ActionListener {
         searchButton.setPreferredSize(new Dimension(90, 30));
         searchButton.addActionListener(this);
         buttonPanel2.add(searchButton);
-        //buttonPanel2.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY));
         secondPage.add(buttonPanel2, BorderLayout.SOUTH);
 
+        // Panel ładowania
         layeredPane = new JLayeredPane();
         layeredPane.setLayout(new OverlayLayout(layeredPane));
         layeredPane.add(secondPage, new Integer(0));
@@ -285,17 +289,17 @@ public class AppGui extends JFrame implements ActionListener {
         loadingPanel.setVisible(false);
         layeredPane.add(loadingPanel, new Integer(1));
         add(layeredPane);
-        // end panel2
+        // Koniec drugiej strony
 
-        // panel3
+        // Trzecia strona
         thirdPage = new JPanel();
         thirdPage.setLayout(listLayout);
         add(thirdPage);
-        // end panel3
+        // Koniec trzeciej strony
 
         pack();
 
-        // connection
+        // Panel połaczenia
         if (!isConnected) {
             this.setEnabled(false);
             connectionDialog = new JDialog(this, "Connection error");
@@ -336,6 +340,7 @@ public class AppGui extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Przejście z pierwszej strony na drugą wiąże się z przefiltrowaniem danych
         if (e.getActionCommand().equals("forward")) {
             try {
                 CarData.setMinPrice(Integer.parseInt(minPrice.getText()));
@@ -394,6 +399,7 @@ public class AppGui extends JFrame implements ActionListener {
 
 
         }
+        // Ponawianie próby połączenia, dopóki dane się nie załadują, nie można używać aplikacji
         if (e.getActionCommand().equals("reload")) {
             connectText.setText("\n\nLoading...");
             new Thread(() -> {
@@ -415,10 +421,11 @@ public class AppGui extends JFrame implements ActionListener {
             }).start();
 
         }
-
+        // Powrót do poprzedniej strony
         if (e.getActionCommand().equals("back")) {
             mainLayout.previous(this.getContentPane());
         }
+        // Przejście z drugiej strony do listy samochodów
         if (e.getActionCommand().equals("search")) {
             loadingPanel.setVisible(true);
             Thread listingCars = new Thread(() -> {
@@ -433,8 +440,8 @@ public class AppGui extends JFrame implements ActionListener {
                 loadingPanel.setVisible(false);
             });
             listingCars.start();
-
         }
+        // Zmiana zaznaczenia filtrów
         if (e.getSource().equals(petrolCheck)){
             if (petrolCheck.isSelected()){
                 CarData.fuel.add(petrolCheck.getText());
@@ -495,6 +502,7 @@ public class AppGui extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    // Main
     public static void main(String[] args) {
         try {
             CarData.loadData();

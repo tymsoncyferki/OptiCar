@@ -18,9 +18,11 @@ import java.net.URL;
 import java.util.Map;
 
 public class Car implements ActionListener{
-    static JFrame frame;
+
+    static JFrame frame; // główne okno
     JPanel mainPanel;
     JFrame carInfoDetailed;
+    // Pola z danymi samochodu
     String photo;
     String brand;
     String model;
@@ -34,13 +36,14 @@ public class Car implements ActionListener{
     String driveType;
     String cityConsumption;
     String highwayConsumption;
-    String height;
-    String weight;
-    String length;
-    String width;
-    String doors;
-    String seats;
+    private String height;
+    private String weight;
+    private String length;
+    private String width;
+    private String doors;
+    private String seats;
 
+    // Konstruktor samochodu
     public Car(Table carRow) {
         mainPanel = new JPanel();
         carInfoDetailed = new JFrame();
@@ -65,13 +68,17 @@ public class Car implements ActionListener{
         seats = carRow.get(0,"Seats");
     }
 
+    // Panel samochodu do wyświetlania w liście
     public JPanel carInfo() throws IOException {
-        //todo
-        // zmienić, żeby się ładnie wyświetlało
+
         Color myColor = Color.decode("#55acee");
         mainPanel.setPreferredSize(new Dimension(400, 150));
         mainPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
         mainPanel.setLayout(new BorderLayout());
+        mainPanel.setMaximumSize(new Dimension(1000,165));
+        mainPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Kliknięcie i otworzenie okna ze szczegółowymi danymi
         mainPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -97,8 +104,8 @@ public class Car implements ActionListener{
                 mainPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
             }
         });
-        mainPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+        // Informacje
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.PAGE_AXIS));
         infoPanel.setPreferredSize(new Dimension(400, 150));
@@ -112,7 +119,7 @@ public class Car implements ActionListener{
         carPrice.setFont(new Font("Segoe UI Semibold",  Font.PLAIN, 20));
         infoPanel.add(carPrice, Component.LEFT_ALIGNMENT);
 
-
+        // Zdjęcie
         JPanel photoPanel = new JPanel();
         photoPanel.setSize(new Dimension(260, 140));
         URL url = new URL(photo);
@@ -133,8 +140,9 @@ public class Car implements ActionListener{
         JLabel carPhoto = new JLabel(icon);
         photoPanel.add(carPhoto);
         mainPanel.add(photoPanel, BorderLayout.WEST);
-        mainPanel.setMaximumSize(new Dimension(1000,165));
+        mainPanel.add(infoPanel, BorderLayout.CENTER);
 
+        // Przycisk szukania
         JLabel searchWeb = new JLabel("Search web");
         searchWeb.setBorder(new EmptyBorder(10, 10, 10, 10));
         Font searchFont = searchWeb.getFont();
@@ -146,12 +154,10 @@ public class Car implements ActionListener{
                 String string = "https://www.google.com/search?q=" + brand + " " + model;
                 String uri = string.replaceAll(" ", "+").toLowerCase();
                 openWebpage(URI.create(uri));
-
             }
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-
                 Map attributes = searchFont.getAttributes();
                 attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
                 searchWeb.setFont(searchFont.deriveFont(attributes));
@@ -162,26 +168,23 @@ public class Car implements ActionListener{
                 searchWeb.setFont(searchFont);
             }
         });
-
         JPanel morePanel = new JPanel();
         morePanel.setLayout(new BoxLayout(morePanel, BoxLayout.PAGE_AXIS));
         morePanel.add(Box.createRigidArea(new Dimension(5,0)), Component.RIGHT_ALIGNMENT);
         morePanel.add(searchWeb, Component.RIGHT_ALIGNMENT);
         mainPanel.add(morePanel, BorderLayout.EAST);
-        mainPanel.add(infoPanel, BorderLayout.CENTER);
-
 
         return mainPanel;
-
     }
 
-
+    // Okno ze szczegółowymi informacjami wyświetlonymi w tabeli
     public JFrame CarInfoDetailed() throws IOException{
 
         JFrame carInfoDetailed  = new JFrame("Technical specifications");
         carInfoDetailed.setMinimumSize(new Dimension(960, 500));
         carInfoDetailed.setResizable(false);
-        carInfoDetailed.setLocation(0, 30);
+        ImageIcon icon = new ImageIcon("res/car-icon.png");
+        carInfoDetailed.setIconImage(icon.getImage());
 
         String[][] dataBasic ={
                 {"Model", brand + " " + model},
@@ -280,26 +283,26 @@ public class Car implements ActionListener{
         return carInfoDetailed;
     }
 
-    public static BufferedImage makeRoundedCorner(BufferedImage image, int cornerRadius) {
+    // Zaokrąglenie rogów zdjęcia
+    private static BufferedImage makeRoundedCorner(BufferedImage image, int cornerRadius) {
+
         int w = image.getWidth();
         int h = image.getHeight();
         BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2 = output.createGraphics();
-
         g2.setComposite(AlphaComposite.Src);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.WHITE);
         g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
-
         g2.setComposite(AlphaComposite.SrcAtop);
         g2.drawImage(image, 0, 0, null);
-
         g2.dispose();
 
         return output;
     }
 
+    // Otwieranie strony w przeglądarce
     public static void openWebpage(URI uri) {
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -312,6 +315,5 @@ public class Car implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
     }
 }

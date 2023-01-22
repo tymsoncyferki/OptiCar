@@ -5,6 +5,7 @@ import java.awt.*;
 
 public abstract class Information {
 
+    // Okno dialogowe, pomoc do filtrowania
     public static JDialog filterHelp(JFrame frame) {
         JDialog dialog = new JDialog(frame, "Filtering help");
         dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -30,6 +31,7 @@ public abstract class Information {
         return dialog;
     }
 
+    // Okno z pomocą dotyczącą cech
     public static JDialog traitHelp(JFrame frame) {
         JDialog dialog = new JDialog(frame, "Traits guide");
         dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -67,6 +69,7 @@ public abstract class Information {
         return dialog;
     }
 
+    // Okno z informacjami o aplikacji
     public static JDialog appInfo(JFrame frame) {
         JDialog dialog = new JDialog(frame, "About app");
         dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -74,7 +77,7 @@ public abstract class Information {
         JTextPane textArea = new JTextPane();
         String info = "GENERAL\n"
                 + "Data and photos acquired from www.ccarprices.com and thoroughly cleaned. Data contains " +
-                "over 2500 cars from years 2022 and 2023. May be updated in the future. \n\n"
+                "over 2500 cars from years 2022 and 2023. May be updated in the future.\n\n"
                 + "WARNING\n"
                 + "Technical specifications and prices may be inacurate. To check current prices and availability" +
                 " in your area it is recommended to go to the official website of the car manufacturer. Our " +
@@ -92,15 +95,19 @@ public abstract class Information {
         return dialog;
     }
 
+    // Okno z informacjami o projekcie
     public static JDialog projectInfo(JFrame frame) {
-        JDialog dialog = new JDialog(frame, "About app");
+        JDialog dialog = new JDialog(frame, "About project");
         dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         dialog.setPreferredSize(new Dimension(300, 300));
         JTextPane textArea = new JTextPane();
         String info = "GENERAL\n"
-                + "Nothing to see here... \n\n"
-                + "WARNING\n"
-                + "yet.";
+                + "Welcome to OptiCar! This project was created for the \"Advanced Object-oriented and Functional Programming\" course" +
+                " at the Warsaw University of Technology. \n\n"
+                + "CONTACT\n"
+                + "In case of any questions or problems contact us at tymekurban@gmail.com.\n\n"
+                + "AUTHORS\n"
+                + "Tymoteusz Urban\nSebastian Trojan\nWiktor Woźniak";
         StyledDocument doc = textArea.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), new SimpleAttributeSet(), true);
         textArea.setText(info);

@@ -6,12 +6,12 @@ import java.awt.event.MouseEvent;
 
 public class DragAndDropList extends JPanel {
 
-    static JList<String> dndList;
+    static JList<String> dndList; // Lista kafelków
     static DefaultListModel<String> traitsList;
     String[] traits = new String[] { "Dynamics", "Practicality", "Safety", "Sport character", "Equipment", "Efficiency", "Price", "Off-road capabilities"};
 
+    // Panel z kafelkami
     public DragAndDropList() {
-
         traitsList = new DefaultListModel<>();
         for (String trait : traits) {
             traitsList.addElement(trait);
@@ -30,13 +30,15 @@ public class DragAndDropList extends JPanel {
         this.add(dndList);
     }
 
+    // Interaktywna lista przycisków
     private static class DnDAdapter extends MouseInputAdapter {
 
         private boolean mouseDragging = false;
-        private int dragSourceIndex;
-        private int sourceIndex;
+        private int dragSourceIndex; // zmienia się wraz z przenoszeniem kafelka
+        private int sourceIndex; // pierwotne położenie kafelka
         private boolean wasDragged;
 
+        // Przyciśnięcie kafelka
         @Override
         public void mousePressed(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e)) {
@@ -47,10 +49,12 @@ public class DragAndDropList extends JPanel {
             }
         }
 
+        // Skończenie przenoszenia
         @Override
         public void mouseReleased(MouseEvent e) {
             mouseDragging = false;
             int endIndex = dndList.locationToIndex(e.getPoint());
+            // Zmień zaznaczenie kafelka tylko jeśli kafelek nie zmienił miejsca na liście
             if (endIndex == sourceIndex & !wasDragged) {
                 if (dndList.isSelectedIndex(sourceIndex)) {
                     dndList.removeSelectionInterval(sourceIndex, sourceIndex);
@@ -60,17 +64,22 @@ public class DragAndDropList extends JPanel {
             }
         }
 
+        // Przenoszenie kafelka
         @Override
         public void mouseDragged(MouseEvent e) {
             if (mouseDragging) {
                 int currentIndex = dndList.locationToIndex(e.getPoint());
+                // Jeśli kursor zmienił położenie i wskazuje na inny kafelek
                 if (currentIndex != dragSourceIndex) {
                     wasDragged = true;
                     String dragElement = traitsList.get(dragSourceIndex);
                     boolean isSrc = dndList.isSelectedIndex(dragSourceIndex);
                     boolean isCur = dndList.isSelectedIndex(currentIndex);
+                    // Zamień kafelki
                     traitsList.remove(dragSourceIndex);
                     traitsList.add(currentIndex, dragElement);
+                    // Zaznaczenie jest po indeksach, zatem jeśli zamienimy zaznaczony kafelek z niezaznaczonym,
+                    // musimy odwrócić zaznaczenie kafelków
                     if (isSrc) {
                         dndList.addSelectionInterval(currentIndex, currentIndex);
                     } else {
@@ -87,6 +96,7 @@ public class DragAndDropList extends JPanel {
         }
     }
 
+    // Wygląd kafelków
     public static class buttonCellRenderer extends DefaultListCellRenderer {
 
         @Override
