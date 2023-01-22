@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyverse)
 
 #Zaczytanie
-dfraw <- read.csv("cars_old.csv")
+dfraw <- read.csv("cars_raw.csv")
 #Wybór potrzebnych kolumn
 sam <- dfraw %>%
   select(-Made.In, -Warranty, -Available.Colors,  -Charger,
@@ -335,9 +335,6 @@ dfraw <- dfraw %>%
 
 # Przeznaczenie trasy
 dfraw <- dfraw %>% 
-  mutate(Punkty_rozmiar_trasa = case_when(is.na(rozmiar) ~ 0,
-                                          rozmiar >= 2000000 ~ 0,
-                                          T ~ round(abs((rozmiar - median(rozmiar, na.rm = T)) / (2000000 - median(rozmiar, na.rm = T))) * 10, 1) * 10)) %>% 
   mutate(Punkty_paliwo_trasa = case_when(paliwo %in% c("Petrol", "Diesel", "Hybrid") ~ 10,
                                          paliwo == "Electric" ~ 2, 
                                          T ~ 0)) %>% 
@@ -351,7 +348,7 @@ dfraw <- dfraw %>%
                                            nadwozie %in% c("Wagon", "Sedan") ~ 10,
                                            nadwozie == "Truck" ~ 1,
                                            T ~ 0)) %>%   
-  mutate(Punkty_trasa = round((Punkty_rozmiar_trasa + Punkty_paliwo_trasa +  Punkty_spalanie_trasa + Punkty_nadwozie_trasa + Punkty_pojemnosc_baku) / 5, 1)) %>% 
+  mutate(Punkty_trasa = round((Punkty_paliwo_trasa +  Punkty_spalanie_trasa + Punkty_nadwozie_trasa + Punkty_pojemnosc_baku) / 5, 1)) %>% 
   mutate(Punkty_trasa = round((Punkty_trasa - min(Punkty_trasa)) / (max(Punkty_trasa) - min(Punkty_trasa)) * 10, 1))
 
 
