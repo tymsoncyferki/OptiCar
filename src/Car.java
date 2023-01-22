@@ -199,8 +199,9 @@ public class Car implements ActionListener{
         tableBasic.getTableHeader().setReorderingAllowed(false);
         tableBasic.getTableHeader().setResizingAllowed(false);
 
+
         if (torque.length() > 0) {
-            torque = String.valueOf((int) (Double.parseDouble(torque) * 1.356));
+            torque = String.valueOf((int) Double.parseDouble(torque));
         }
         if (power.length() > 0) {
             power = String.valueOf((int) Double.parseDouble(power));
@@ -209,7 +210,7 @@ public class Car implements ActionListener{
         String[][] dataEngine ={
                 {"Engine type", engineType},
                 {"Engine Power", power + " HP"},
-                {"Torque", torque + " Nm"},
+                {"Torque", torque + " lb-ft"},
                 {"Fuel Type", fuelType}};
         String[] columnEngine ={"Engine", ""};
         JTable tableEngine = new JTable(dataEngine,columnEngine) {
