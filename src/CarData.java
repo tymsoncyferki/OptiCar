@@ -58,7 +58,7 @@ public abstract class CarData {
 
     // Załadowanie danych
     public static void loadData() throws IOException {
-        URL url = new URL("https://raw.githubusercontent.com/tymsoncyferki/Java-findcar/main/cars.csv");
+        URL url = new URL("https://raw.githubusercontent.com/tymsoncyferki/ZPOiF-OptiCar/master/data/cars.csv");
         InputStream inputStream = url.openStream();
         ColumnType[] types = {ColumnType.STRING, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE,ColumnType.DOUBLE,ColumnType.DOUBLE,ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE};
         try {
