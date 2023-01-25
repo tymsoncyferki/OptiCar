@@ -4,3 +4,5 @@ This project was created for the Advanced Object-oriented and Functional Program
 Data and photos acquired from www.ccarprices.com.
 
 ## Collaborators:
+[Sebastian Trojan](https://github.com/SebastianTrojan)
+[Wiktor Woźniak](https://github.com/wozniakw2002)
