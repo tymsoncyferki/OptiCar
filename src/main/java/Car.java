@@ -47,25 +47,26 @@ public class Car implements ActionListener{
     public Car(Table carRow) {
         mainPanel = new JPanel();
         carInfoDetailed = new JFrame();
-        photo = carRow.get(0, "Photo");
-        brand = carRow.get(0, "Brand");
-        model = carRow.get(0, "Model");
-        body = carRow.get(0, "Body");
-        price = (int) Double.parseDouble(carRow.get(0, "Pricing"));
-        engineType = carRow.get(0,"Engine");
-        fuelType = carRow.get(0,"Fuel");
-        torque = carRow.get(0,"Torque_lb_ft");
-        power = carRow.get(0,"Power");
-        gearBox = carRow.get(0,"GearBox");
-        driveType = carRow.get(0,"Drivetrain");
-        cityConsumption = carRow.get(0,"Consumption_city");
-        highwayConsumption = carRow.get(0,"Consumption_highway");
-        height = carRow.get(0,"Height");
-        weight = carRow.get(0,"Weight_lbs");
-        length = carRow.get(0,"Length");
-        width = carRow.get(0,"Width");
-        doors = carRow.get(0,"Doors");
-        seats = carRow.get(0,"Seats");
+        photo = (String) carRow.get(0, carRow.columnIndex("Photo"));
+        brand = (String) carRow.get(0, carRow.columnIndex("Brand"));
+        model = (String) carRow.get(0, carRow.columnIndex("Model"));
+        body = (String) carRow.get(0, carRow.columnIndex("Body"));
+        price = ((Double) carRow.get(0, carRow.columnIndex("Pricing"))).intValue();
+        engineType = (String) carRow.get(0, carRow.columnIndex("Engine"));
+        fuelType = (String) carRow.get(0, carRow.columnIndex("Fuel"));
+        torque = (String) carRow.get(0, carRow.columnIndex("Torque_lb_ft"));
+        power = (String) carRow.get(0, carRow.columnIndex("Power"));
+        gearBox = (String) carRow.get(0, carRow.columnIndex("GearBox"));
+        driveType = (String) carRow.get(0, carRow.columnIndex("Drivetrain"));
+        cityConsumption = (String) carRow.get(0, carRow.columnIndex("Consumption_city"));
+        highwayConsumption = (String) carRow.get(0, carRow.columnIndex("Consumption_highway"));
+        height = (String) carRow.get(0, carRow.columnIndex("Height"));
+        weight = (String) carRow.get(0, carRow.columnIndex("Weight_lbs"));
+        length = (String) carRow.get(0, carRow.columnIndex("Length"));
+        width = (String) carRow.get(0, carRow.columnIndex("Width"));
+        doors = (String) carRow.get(0, carRow.columnIndex("Doors"));
+        seats = (String) carRow.get(0, carRow.columnIndex("Seats"));
+
     }
 
     // Panel samochodu do wyświetlania w liście

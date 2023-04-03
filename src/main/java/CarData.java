@@ -1,5 +1,7 @@
 import tech.tablesaw.api.*;
 import tech.tablesaw.io.csv.CsvReadOptions;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -20,8 +22,7 @@ public abstract class CarData {
 
     // Filtrowanie danych
     public static void filterData() {
-        filteredCars = mainTable
-                .where(mainTable.numberColumn("Pricing").isBetweenInclusive(minPrice, maxPrice));
+        filteredCars = mainTable.where(mainTable.numberColumn("Pricing").isBetweenInclusive(minPrice, maxPrice));
 
         filteredCars = filteredCars.where(filteredCars.stringColumn("Fuel").isIn(fuel));
 
@@ -60,14 +61,17 @@ public abstract class CarData {
     public static void loadData() throws IOException {
         URL url = new URL("https://raw.githubusercontent.com/tymsoncyferki/ZPOiF-OptiCar/master/data/cars.csv");
         InputStream inputStream = url.openStream();
-        ColumnType[] types = {ColumnType.STRING, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE,ColumnType.DOUBLE,ColumnType.DOUBLE,ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE};
-        try {
-            mainTable = Table.read().csv(CsvReadOptions
-                    .builder(inputStream, "UTF-8")
-                    .columnTypes(types));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        File file = new File("data/cars.csv");
+//        InputStream inputStream = file.toURL().openStream();
+        ColumnType[] types = {ColumnType.STRING, ColumnType.DOUBLE, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING,ColumnType.STRING,ColumnType.STRING,ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE, ColumnType.DOUBLE};
+        CsvReadOptions csvReadOptions =
+                CsvReadOptions.
+                        builder(inputStream).
+                        separator(',').
+                        header(true).
+                        columnTypes(types).
+                        build();
+        mainTable = Table.read().usingOptions(csvReadOptions);
         inputStream.close();
     }
 
